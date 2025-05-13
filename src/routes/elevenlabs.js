@@ -280,7 +280,7 @@ async function handleSendBookingSMS(req, res) {
 /**
  * Handles Twilio call personalization by providing dynamic context for
  * incoming calls. Detects caller's time zone, formats date/time, and
- * customizes the greeting based on time of day.
+ * provides context variables to the agent.
  * 
  * @route   POST /api/elevenlabs/twilio-personalization
  * @desc    Handle Twilio call personalization webhook
@@ -339,9 +339,7 @@ router.post('/twilio-personalization', authenticateApiKey, (req, res) => {
           // Use the full system prompt with replaced variables
           prompt: {
             prompt: customizedPrompt
-          },
-          // Customize the first message based on time of day
-          first_message: getGreetingByTimeOfDay(now) + " I'm your Calendly booking assistant. How can I help you today?"
+          }
         }
       }
     });
