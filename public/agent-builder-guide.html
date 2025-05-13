@@ -288,6 +288,22 @@
       margin: 1.5rem 0;
     }
 
+    .alert-danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid #dc3545;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .alert-success {
+      background-color: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid #28a745;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
     .field-description {
       background-color: #f8f9fa;
       border-radius: 10px;
@@ -312,6 +328,27 @@
       font-weight: 600;
       margin-bottom: 0.5rem;
       color: var(--primary-color);
+    }
+
+    .security-steps {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--card-shadow);
+    }
+
+    .step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -351,6 +388,9 @@
                 <a href="#step4"><i class="fas fa-check-circle"></i> Step 4: Review & Create</a>
               </li>
               <li>
+                <a href="#security"><i class="fas fa-shield-alt"></i> Step 5: Secure Your Agent</a>
+              </li>
+              <li>
                 <a href="#testing"><i class="fas fa-vial"></i> Testing Your Agent</a>
               </li>
               <li>
@@ -379,6 +419,9 @@
               </li>
               <li>
                 <a href="technical.html"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="security.html"><i class="fas fa-shield-alt"></i> Security Guidelines</a>
               </li>
               <li>
                 <a href="troubleshooting.html"><i class="fas fa-life-ring"></i> Troubleshooting</a>
@@ -564,9 +607,117 @@
               <p class="img-caption">Success message after agent creation</p>
             </div>
 
-            <div class="alert-info">
-              <strong>Note:</strong> After creation, you'll have the option to customize your agent's system prompt. We
-              recommend doing this to personalize your agent's behavior.
+            <div class="alert-danger">
+              <strong>Important Security Notice:</strong> When your agent is first created, your API key is embedded as plaintext in the agent configuration. This creates a potential security risk. Make sure to follow the security step below before using your agent in production.
+            </div>
+          </div>
+        </div>
+
+        <div id="security" class="builder-step">
+          <div class="step-number">5</div>
+          <div class="step-header">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Secure Your Agent</h3>
+          </div>
+
+          <div class="step-content">
+            <p>This critical security step must be completed after creating your agent and before using it in production:</p>
+
+            <div class="alert-danger">
+              <strong>Security Risk:</strong> The automatically created agent contains your server's API key as plaintext in multiple locations. This means anyone with access to your agent configuration could see and use your API key. <strong>The key is now compromised and must be changed.</strong>
+            </div>
+
+            <div class="security-steps">
+              <h4 class="mb-3">Complete Security Process - Key Rotation Required</h4>
+              
+              <div class="alert-danger mb-4">
+                <strong>Important:</strong> Your original API key has been exposed in plaintext to Elevenlabs. You must consider it compromised and rotate (change) it for proper security.
+              </div>
+              
+              <div class="mb-4">
+                <div class="step-icon">1</div>
+                <strong>Generate a New API Key</strong>
+                <p>First, create a new secure API key:</p>
+                <ol>
+                  <li>Generate a new random API key (at least 16 characters with letters, numbers, and symbols)</li>
+                  <li>You can use a password generator or the key generator on the <a href="security.html">Security Guidelines</a> page</li>
+                  <li>Copy this new key - you'll need it in the next steps</li>
+                </ol>
+              </div>
+
+              <div class="mb-4">
+                <div class="step-icon">2</div>
+                <strong>Update Your Server Environment Variable</strong>
+                <p>Replace your original (now compromised) API key with the new one:</p>
+                <ol>
+                  <li>Go to your Render dashboard (or wherever your server is hosted)</li>
+                  <li>Navigate to the Environment Variables section</li>
+                  <li>Find the <code>API_KEY</code> variable</li>
+                  <li>Update its value with your new API key</li>
+                  <li>Save the changes and wait for your server to redeploy (this usually takes a few minutes)</li>
+                </ol>
+              </div>
+
+              <div class="mb-4">
+                <div class="step-icon">3</div>
+                <strong>Create a Secret in Elevenlabs</strong>
+                <p>Now create a secret using your new API key:</p>
+                <ol>
+                  <li>Log in to your Elevenlabs account</li>
+                  <li>Go to Workspace Settings</li>
+                  <li>Click on the "Secrets" tab</li>
+                  <li>Create a new secret named "Server API Key"</li>
+                  <li>Enter your <strong>new</strong> API key as the value</li>
+                  <li>Save the secret and note the secret ID that is generated</li>
+                </ol>
+              </div>
+
+              <div class="mb-4">
+                <div class="step-icon">4</div>
+                <strong>Update Your Agent's Function Webhooks</strong>
+                <p>Next, edit your agent in Elevenlabs to use the secret:</p>
+                <ol>
+                  <li>Go to your agent page in Elevenlabs</li>
+                  <li>Click "Edit Agent"</li>
+                  <li>Click on the "Code" tab</li>
+                  <li>Find each webhook function (checkAvailability, checkTimes, sendBookingSMS)</li>
+                  <li>For each function, find the <code>"X-API-Key": "your-old-api-key-here"</code> line</li>
+                  <li>Replace it with: <code>"X-API-Key": { "secret_id": "your-secret-id-here" }</code></li>
+                  <li>Do this for all three tool functions</li>
+                </ol>
+              </div>
+
+              <div class="mb-4">
+                <div class="step-icon">5</div>
+                <strong>Update the Twilio Personalization Webhook</strong>
+                <p>There's one more place to secure your API key:</p>
+                <ol>
+                  <li>In the same "Code" tab, find the section titled <code>"workspace_overrides"</code></li>
+                  <li>Look for <code>"conversation_initiation_client_data_webhook"</code></li>
+                  <li>Again, replace <code>"X-API-Key": "your-old-api-key-here"</code> with <code>"X-API-Key": { "secret_id": "your-secret-id-here" }</code></li>
+                </ol>
+              </div>
+
+              <div class="mb-4">
+                <div class="step-icon">6</div>
+                <strong>Save and Verify</strong>
+                <p>Save your updated agent configuration and test it to ensure everything still works correctly. The agent should now use your new API key via the Elevenlabs secret.</p>
+              </div>
+
+              <div class="alert-success mt-3">
+                <strong>Why This Key Rotation Process Matters:</strong>
+                <ul>
+                  <li>Invalidates the original API key that was exposed in plaintext</li>
+                  <li>Prevents anyone with access to the original agent configuration from accessing your server</li>
+                  <li>Protects your Calendly data and prevents unauthorized use of your agent</li>
+                  <li>Establishes a secure authentication system with proper secret management</li>
+                  <li>Follows industry best practices for credential rotation after exposure</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="alert-info mt-3">
+              <strong>Need More Help?</strong> See the <a href="security.html">Security Guidelines</a> page for more detailed information about securing your integration.
             </div>
           </div>
         </div>
@@ -575,7 +726,7 @@
           <div class="card-body">
             <h3 class="mb-3">Testing Your Agent</h3>
 
-            <p>Now that your agent is created, you should test it to make sure everything is working properly:</p>
+            <p>Now that your agent is created and secured, you should test it to make sure everything is working properly:</p>
 
             <div class="row g-4">
               <div class="col-md-6">
@@ -623,6 +774,16 @@
                 <li>"Do you have any availability on Tuesday?"</li>
                 <li>"I'd like a 30-minute strategy session."</li>
                 <li>"Can I book a time on Friday afternoon?"</li>
+              </ol>
+            </div>
+
+            <div class="alert-warning mt-3">
+              <strong>Troubleshooting:</strong> If you encounter "Unauthorized" errors during testing, double check that:
+              <ol>
+                <li>You've correctly replaced the API key with your Elevenlabs secret ID in all locations</li>
+                <li>The <strong>new</strong> API_KEY in your server environment variables exactly matches what you entered when creating the secret</li>
+                <li>Your server has finished redeploying after the API key change</li>
+                <li>Your server is properly running and accessible at the configured URL</li>
               </ol>
             </div>
           </div>
