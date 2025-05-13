@@ -1,10 +1,10 @@
 // src/config/prompts/systemPrompt.js
 
 /**
- * System prompt for the Elevenlabs voice agent.
- * This template can be modified through the prompt builder interface.
+ * System prompt for the Elevenlabs agent.
+ * This can be easily edited without modifying other code.
  * 
- * Dynamic variables:
+ * Available dynamic variables:
  * {{current_date}} - Current date in format like "Friday, May 9, 2025"
  * {{current_time}} - Current time in format like "3:45 PM"
  * {{caller_number}} - Phone number of the caller (if available)
