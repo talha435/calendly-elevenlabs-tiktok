@@ -728,6 +728,7 @@
                 </div>
                 
                 <script>
+                  // Generate a secure random API key
                   function generateSecureKey() {
                     const length = 32;
                     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
@@ -741,6 +742,7 @@
                     document.getElementById("generatedKey").value = result;
                   }
                   
+                  // Copy the generated key to clipboard
                   function copyToClipboard() {
                     const copyText = document.getElementById("generatedKey");
                     copyText.select();
@@ -754,6 +756,7 @@
                     }, 2000);
                   }
                   
+                  // Function for the second key generator
                   function generateSecureKey2() {
                     const length = 32;
                     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
@@ -767,6 +770,7 @@
                     document.getElementById("generatedKey2").value = result;
                   }
                   
+                  // Copy the second generated key to clipboard
                   function copyToClipboard2() {
                     const copyText = document.getElementById("generatedKey2");
                     copyText.select();
@@ -779,6 +783,21 @@
                       alert.style.display = "none";
                     }, 2000);
                   }
+                  
+                  // Add event listeners when the document is loaded
+                  document.addEventListener('DOMContentLoaded', function() {
+                    // Add event listeners for the first generator
+                    const generateBtn = document.getElementById('generateBtn');
+                    const copyBtn = document.getElementById('copyBtn');
+                    if (generateBtn) generateBtn.addEventListener('click', generateSecureKey);
+                    if (copyBtn) copyBtn.addEventListener('click', copyToClipboard);
+                    
+                    // Add event listeners for the second generator
+                    const generateBtn2 = document.getElementById('generateBtn2');
+                    const copyBtn2 = document.getElementById('copyBtn2');
+                    if (generateBtn2) generateBtn2.addEventListener('click', generateSecureKey2);
+                    if (copyBtn2) copyBtn2.addEventListener('click', copyToClipboard2);
+                  });
                 </script>
               </div>
               
