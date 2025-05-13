@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Reference | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
+
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    code {
+      color: var(--primary-color);
+    }
+
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    .content-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .section-header i {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .endpoint-card {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .endpoint-method {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+
+    .method-post {
+      background-color: #198754;
+      color: white;
+    }
+
+    .method-get {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    .alert-info {
+      background-color: rgba(37, 117, 252, 0.1);
+      border-left: 4px solid var(--secondary-color);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Technical Reference</h1>
+      <p class="lead mb-4">API endpoints, configuration options, and technical details</p>
+      <a href="help.html" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Documentation</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>On This Page</h3>
+            <ul>
+              <li>
+                <a href="#api-endpoints"><i class="fas fa-network-wired"></i> API Endpoints</a>
+              </li>
+              <li>
+                <a href="#configuration"><i class="fas fa-sliders-h"></i> Configuration Reference</a>
+              </li>
+              <li>
+                <a href="#security"><i class="fas fa-shield-alt"></i> Security Features</a>
+              </li>
+              <li>
+                <a href="#system-variables"><i class="fas fa-code"></i> System Variables</a>
+              </li>
+              <li>
+                <a href="#webhooks"><i class="fas fa-plug"></i> Webhooks</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul>
+              <li>
+                <a href="help.html"><i class="fas fa-home"></i> Documentation Home</a>
+              </li>
+              <li>
+                <a href="setup.html"><i class="fas fa-rocket"></i> Setup Guide</a>
+              </li>
+              <li>
+                <a href="integrations.html"><i class="fas fa-plug"></i> Integration Setup</a>
+              </li>
+              <li>
+                <a href="agent-builder-guide.html"><i class="fas fa-robot"></i> Agent Builder Guide</a>
+              </li>
+              <li>
+                <a href="prompt-guide.html"><i class="fas fa-edit"></i> System Prompt Guide</a>
+              </li>
+              <li>
+                <a href="technical.html" class="active"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="troubleshooting.html"><i class="fas fa-life-ring"></i> Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div id="api-endpoints" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-network-wired"></i> API Endpoints</h3>
+          </div>
+
+          <p>The Calendly-Elevenlabs Integration server exposes several API endpoints that are used by the voice agent
+            and the web interface. All API endpoints require authentication via API key or admin credentials.</p>
+
+          <div class="alert-info">
+            <strong>Authentication:</strong> All API endpoints are protected and require either:
+            <ul>
+              <li>API Key in the <code>X-API-Key</code> header (matching the <code>API_KEY</code> environment variable)
+              </li>
+              <li>Basic Authentication with your admin password (set in the <code>ADMIN_PASSWORD</code> environment
+                variable)</li>
+            </ul>
+          </div>
+
+          <div class="endpoint-card">
+            <h5>
+              <span class="endpoint-method method-post">POST</span>
+              <code>/api/elevenlabs/function-handler</code>
+            </h5>
+            <p>Main function handler for the voice agent. Handles all the function calls from Elevenlabs, including:</p>
+            <ul>
+              <li><strong>checkAvailability</strong>: Gets weekly availability from Calendly</li>
+              <li><strong>checkTimes</strong>: Gets specific time slots for a selected date</li>
+              <li><strong>sendBookingSMS</strong>: Sends booking confirmation via SMS</li>
+            </ul>
+            <p><strong>Authentication:</strong> Requires API key in X-API-Key header</p>
+          </div>
+
+          <div class="endpoint-card">
+            <h5>
+              <span class="endpoint-method method-post">POST</span>
+              <code>/api/elevenlabs/twilio-personalization</code>
+            </h5>
+            <p>Webhook for Twilio call personalization. Provides the current date, time, and caller information to the
+              voice agent.</p>
+            <p><strong>Authentication:</strong> Requires API key in X-API-Key header</p>
+          </div>
+
+          <div class="endpoint-card">
+            <h5>
+              <span class="endpoint-method method-post">POST</span>
+              <code>/api/elevenlabs/create-agent</code>
+            </h5>
+            <p>Creates and configures a new voice agent in Elevenlabs. Used by the Agent Builder interface.</p>
+            <p><strong>Authentication:</strong> Requires API key in X-API-Key header or Basic Authentication</p>
+            <p><strong>Note:</strong> Uses environment variables for Elevenlabs API key</p>
+          </div>
+
+          <div class="endpoint-card">
+            <h5>
+              <span class="endpoint-method method-get">GET</span>
+              <code>/api/calendly/events</code>
+            </h5>
+            <p>Gets a list of Calendly event types from your account.</p>
+            <p><strong>Authentication:</strong> Requires API key in X-API-Key header or Basic Authentication</p>
+            <p><strong>Note:</strong> Uses the Calendly API token from environment variables</p>
+          </div>
+
+          <div class="endpoint-card">
+            <h5>
+              <span class="endpoint-method method-post">POST</span>
+              <code>/api/prompt-builder/update</code>
+            </h5>
+            <p>Updates the system prompt in your GitHub repository. Used by the Prompt Builder interface.</p>
+            <p><strong>Authentication:</strong> Requires API key in X-API-Key header or Basic Authentication</p>
+            <p><strong>Note:</strong> Uses GitHub credentials from environment variables</p>
+          </div>
+
+          <div class="endpoint-card">
+            <h5>
+              <span class="endpoint-method method-get">GET</span>
+              <code>/health</code>
+            </h5>
+            <p>Health check endpoint that returns server status, version, and timestamp.</p>
+            <p><strong>Authentication:</strong> Public endpoint (no API key required)</p>
+          </div>
+        </div>
+
+        <div id="configuration" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-sliders-h"></i> Configuration Reference</h3>
+          </div>
+
+          <p>The server is configured through environment variables. Here's a comprehensive reference of all available
+            configuration options:</p>
+
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Description</th>
+                  <th>Required</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>PORT</code></td>
+                  <td>Port number for the server to listen on</td>
+                  <td>No</td>
+                  <td>3000</td>
+                </tr>
+                <tr>
+                  <td><code>NODE_ENV</code></td>
+                  <td>Environment mode (development or production)</td>
+                  <td>No</td>
+                  <td>development</td>
+                </tr>
+                <tr>
+                  <td><code>API_KEY</code></td>
+                  <td>Secret key for API authentication</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>ADMIN_PASSWORD</code></td>
+                  <td>Password for accessing admin pages (agent-builder, prompt-builder)</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>CALENDLY_API_TOKEN</code></td>
+                  <td>API token for Calendly integration</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>CALENDLY_USER_UUID</code></td>
+                  <td>Calendly user UUID (optional, auto-discovered if not provided)</td>
+                  <td>No</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>ELEVENLABS_API_KEY</code></td>
+                  <td>API key for Elevenlabs integration</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>GITHUB_TOKEN</code></td>
+                  <td>GitHub Personal Access Token with repo scope</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>GITHUB_REPO_OWNER</code></td>
+                  <td>Your GitHub username</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>GITHUB_REPO_NAME</code></td>
+                  <td>Name of your forked repository</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>GITHUB_BRANCH</code></td>
+                  <td>Branch name for your repository</td>
+                  <td>No</td>
+                  <td>master</td>
+                </tr>
+                <tr>
+                  <td><code>DEFAULT_TIMEZONE</code></td>
+                  <td>Default timezone for date/time calculations</td>
+                  <td>No</td>
+                  <td>UTC</td>
+                </tr>
+                <tr>
+                  <td><code>ENABLE_SMS</code></td>
+                  <td>Enable SMS functionality (true/false)</td>
+                  <td>Yes</td>
+                  <td>false</td>
+                </tr>
+                <tr>
+                  <td><code>TWILIO_ACCOUNT_SID</code></td>
+                  <td>Twilio account SID for SMS</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>TWILIO_AUTH_TOKEN</code></td>
+                  <td>Twilio authentication token</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>TWILIO_PHONE_NUMBER</code></td>
+                  <td>Twilio phone number for sending SMS</td>
+                  <td>Yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><code>ALLOWED_ORIGINS</code></td>
+                  <td>Comma-separated list of allowed CORS origins (for production)</td>
+                  <td>No</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert-info">
+            <strong>Note:</strong> When using Render for deployment, these variables are set in the Environment tab of
+            your service configuration.
+          </div>
+        </div>
+
+        <div id="security" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-shield-alt"></i> Security Features</h3>
+          </div>
+
+          <p>The application includes several security features to protect your data and APIs:</p>
+
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>API Authentication</td>
+                  <td>All API endpoints are protected with API key authentication using the <code>X-API-Key</code>
+                    header</td>
+                </tr>
+                <tr>
+                  <td>Admin Authentication</td>
+                  <td>Admin pages (agent-builder, prompt-builder) are protected with HTTP Basic Authentication. Enter
+                    any username with the password set in <code>ADMIN_PASSWORD</code>.</td>
+                </tr>
+                <tr>
+                  <td>Environment Variables</td>
+                  <td>All sensitive credentials (API keys, tokens) are stored securely in environment variables</td>
+                </tr>
+                <tr>
+                  <td>Rate Limiting</td>
+                  <td>API rate limiting prevents abuse by limiting the number of requests from a single IP</td>
+                </tr>
+                <tr>
+                  <td>HTTPS Enforcement</td>
+                  <td>In production, the server enforces HTTPS connections to ensure encrypted communication</td>
+                </tr>
+                <tr>
+                  <td>Security Headers</td>
+                  <td>HTTP security headers (via Helmet) protect against common web vulnerabilities</td>
+                </tr>
+                <tr>
+                  <td>CORS Protection</td>
+                  <td>Configurable CORS settings restrict which domains can interact with your API</td>
+                </tr>
+                <tr>
+                  <td>Secure Logging</td>
+                  <td>Logging utilities mask sensitive information to prevent credential leakage</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert-info">
+            <strong>Security Design:</strong> The application follows a single-user deployment model where each user
+            hosts their own instance with their API keys stored securely in environment variables.
+          </div>
+        </div>
+
+        <div id="system-variables" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-code"></i> System Variables</h3>
+          </div>
+
+          <p>The system prompt supports several dynamic variables that are replaced at runtime:</p>
+
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Description</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>{{current_date}}</code></td>
+                  <td>Current date in a human-readable format</td>
+                  <td>Friday, May 10, 2024</td>
+                </tr>
+                <tr>
+                  <td><code>{{current_time}}</code></td>
+                  <td>Current time in a human-readable format</td>
+                  <td>2:30 PM</td>
+                </tr>
+                <tr>
+                  <td><code>{{caller_number}}</code></td>
+                  <td>Phone number of the caller</td>
+                  <td>+1234567890</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>These variables are replaced when the personalization webhook is called at the beginning of a call.</p>
+        </div>
+
+        <div id="webhooks" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-plug"></i> Webhook Structure</h3>
+          </div>
+
+          <p>The integration uses several webhooks to communicate between Elevenlabs and your server:</p>
+
+          <h5>Twilio Personalization Webhook</h5>
+          <p>Called at the beginning of a call to provide context information:</p>
+          <pre><code>{
+  "dynamic_variables": {
+    "current_date": "Friday, May 10, 2024",
+    "current_time": "2:30 PM",
+    "caller_number": "+1234567890",
+    "caller_info": "from caller ending in 7890"
+  },
+  "conversation_config_override": {
+    "agent": {
+      "prompt": {
+        "prompt": "# Identity & Purpose\nYou are a friendly, professional booking assistant for..."
+      },
+      "first_message": "Good afternoon! I'm your Calendly booking assistant. How can I help you today?"
+    }
+  }
+}</code></pre>
+
+          <h5>Function Handler Webhook</h5>
+          <p>Called when the voice agent needs to access Calendly data or send SMS:</p>
+          <pre><code>// checkAvailability function
+{
+  "function_name": "checkAvailability",
+  "parameters": {
+    "eventTypeUrl": "https://api.calendly.com/event_types/a1b2c3d4...",
+    "weekOffset": 0
+  }
+}
+
+// checkTimes function
+{
+  "function_name": "checkTimes",
+  "parameters": {
+    "eventTypeUrl": "https://api.calendly.com/event_types/a1b2c3d4...",
+    "date": "2024-05-15",
+    "period": "morning"
+  }
+}
+
+// sendBookingSMS function
+{
+  "function_name": "sendBookingSMS",
+  "phoneNumber": "+1234567890",
+  "name": "John Doe",
+  "eventTime": "Wednesday, May 15 at 2:30 PM",
+  "eventDuration": "30",
+  "schedulingUrl": "https://calendly.com/yourusername/30min?..."
+}</code></pre>
+
+          <div class="alert-info">
+            <strong>Authentication:</strong> All webhooks are authenticated using the API key specified in your
+            environment variables. The API key is passed in the <code>X-API-Key</code> header.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Builder Guide | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --section-padding: 5rem 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px;
+      /* Space for footer */
+    }
+
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    .documentation-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .documentation-card .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .documentation-card .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .documentation-card .btn {
+      margin-top: auto;
+    }
+
+    .cta-section {
+      background-color: white;
+      border-radius: 15px;
+      padding: 3rem;
+      margin: 3rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .quick-links ul li a:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+
+    /* Code examples styling */
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    code {
+      color: var(--primary-color);
+    }
+
+    /* Table of contents */
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    /* Steps styling */
+    .builder-step {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: 0 5px 10px rgba(106, 17, 203, 0.3);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-header i {
+      font-size: 1.8rem;
+      margin-right: 1rem;
+      color: var(--primary-color);
+    }
+
+    .step-header h3 {
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    .step-content {
+      padding-left: 1rem;
+    }
+
+    .img-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .img-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .img-caption {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #6c757d;
+    }
+
+    .alert-info {
+      background-color: rgba(37, 117, 252, 0.1);
+      border-left: 4px solid var(--secondary-color);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .alert-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .field-description {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .field-description h5 {
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .callout {
+      background-color: rgba(106, 17, 203, 0.05);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .callout-header {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Agent Builder Guide</h1>
+      <p class="lead mb-4">Create and configure your Calendly booking voice agent</p>
+      <a href="help.html" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Documentation</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>On This Page</h3>
+            <ul>
+              <li>
+                <a href="#overview"><i class="fas fa-info-circle"></i> Overview</a>
+              </li>
+              <li>
+                <a href="#step1"><i class="fas fa-key"></i> Step 1: Initial Setup</a>
+              </li>
+              <li>
+                <a href="#step2"><i class="fas fa-calendar-check"></i> Step 2: Event Types</a>
+              </li>
+              <li>
+                <a href="#step3"><i class="fas fa-cog"></i> Step 3: Agent Configuration</a>
+              </li>
+              <li>
+                <a href="#step4"><i class="fas fa-check-circle"></i> Step 4: Review & Create</a>
+              </li>
+              <li>
+                <a href="#testing"><i class="fas fa-vial"></i> Testing Your Agent</a>
+              </li>
+              <li>
+                <a href="#next-steps"><i class="fas fa-arrow-right"></i> Next Steps</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul>
+              <li>
+                <a href="help.html"><i class="fas fa-home"></i> Documentation Home</a>
+              </li>
+              <li>
+                <a href="setup.html"><i class="fas fa-rocket"></i> Setup Guide</a>
+              </li>
+              <li>
+                <a href="integrations.html"><i class="fas fa-plug"></i> Integration Setup</a>
+              </li>
+              <li>
+                <a href="agent-builder-guide.html" class="active"><i class="fas fa-robot"></i> Agent Builder Guide</a>
+              </li>
+              <li>
+                <a href="prompt-guide.html"><i class="fas fa-edit"></i> System Prompt Guide</a>
+              </li>
+              <li>
+                <a href="technical.html"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="troubleshooting.html"><i class="fas fa-life-ring"></i> Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div id="overview" class="card mb-4">
+          <div class="card-body">
+            <h2 class="mb-4">Agent Builder Overview</h2>
+
+            <p>The Agent Builder is a step-by-step interface that helps you create and configure an Elevenlabs voice
+              agent connected to your Calendly account. This guide will walk you through the entire process, from
+              setting up to launching your agent.</p>
+
+            <div class="callout">
+              <div class="callout-header">Before You Begin</div>
+              <p>Make sure you've completed the following prerequisites:</p>
+              <ul>
+                <li>Set up your server (see <a href="setup.html">Setup Guide</a>)</li>
+                <li>Configured the required environment variables (see <a href="integrations.html">Integration
+                    Setup</a>)</li>
+                <li>Have your Calendly and Elevenlabs accounts ready</li>
+              </ul>
+            </div>
+
+            <div class="alert-info">
+              <strong>Authentication Required:</strong> The Agent Builder is a protected admin page. You'll need to
+              enter any username (it can be anything) and the password you set in the <code>ADMIN_PASSWORD</code>
+              environment variable when prompted by your browser.
+            </div>
+
+            <div class="img-container">
+              <img src="images/agent-builder.png" alt="Agent Builder interface" />
+              <p class="img-caption">The Agent Builder interface guides you through a four-step process</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="step1" class="builder-step">
+          <div class="step-number">1</div>
+          <div class="step-header">
+            <i class="fas fa-key"></i>
+            <h3>Initial Setup</h3>
+          </div>
+
+          <div class="step-content">
+            <p>The first step is simply an introduction to the Agent Builder process. Here you'll find important
+              information about the prerequisites for creating your agent:</p>
+
+            <div class="alert-info">
+              <strong>API Keys:</strong> All API keys (Calendly, Elevenlabs, GitHub) are now configured through
+              environment variables on the server for improved security. You don't need to enter them in the interface.
+            </div>
+
+            <p>For this step, simply review the information and click "Begin Setup" to proceed to the next step.</p>
+
+            <div class="img-container">
+              <img src="images/agent-welcome.png" alt="Initial welcome step" />
+              <p class="img-caption">The welcome screen provides information about the setup process</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="step2" class="builder-step">
+          <div class="step-number">2</div>
+          <div class="step-header">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Event Types</h3>
+          </div>
+
+          <div class="step-content">
+            <p>In this step, the Agent Builder automatically discovers all event types in your Calendly account using
+              the API token configured in your environment variables. Select the event types you want to make available
+              for booking:</p>
+
+            <div class="alert-info">
+              <strong>Recommendation:</strong> Select at least two event types with different durations (e.g., 15
+              minutes and 30 minutes) to give callers options.
+            </div>
+
+            <div class="img-container">
+              <img src="images/agent-events.png" alt="Event Type selection" />
+              <p class="img-caption">Select the event types you want to make available for booking</p>
+            </div>
+
+            <div class="callout">
+              <div class="callout-header">Why Select Multiple Event Types?</div>
+              <p>In the system prompt, we've designed the agent to offer callers a choice between:</p>
+              <ul>
+                <li><strong>15-minute Initial Consultation:</strong> For brief introductory calls</li>
+                <li><strong>30-minute Strategy Session:</strong> For more detailed discussions</li>
+              </ul>
+              <p>Selecting both types in this step ensures your agent can offer both options to callers.</p>
+            </div>
+
+            <div class="alert-warning">
+              <strong>No Event Types?</strong> If no event types are displayed, make sure your CALENDLY_API_TOKEN
+              environment variable is correctly set with a valid token. You can check the server logs for any errors
+              related to Calendly API requests.
+            </div>
+          </div>
+        </div>
+
+        <div id="step3" class="builder-step">
+          <div class="step-number">3</div>
+          <div class="step-header">
+            <i class="fas fa-cog"></i>
+            <h3>Agent Configuration</h3>
+          </div>
+
+          <div class="step-content">
+            <p>Now, you'll configure the basic settings for your voice agent:</p>
+
+            <div class="field-description">
+              <h5>Agent Name</h5>
+              <p>Enter a name for your agent (e.g., "Calendly Booking Assistant"). This is used internally in
+                Elevenlabs.</p>
+            </div>
+
+            <div class="field-description">
+              <h5>Agent Greeting</h5>
+              <p>This is the first message your agent will say when answering a call. Customize it to match your brand
+                voice.</p>
+            </div>
+
+            <div class="field-description">
+              <h5>Server URL</h5>
+              <p>The URL of your deployed server (e.g., https://your-app-name.onrender.com). This allows the agent to
+                call back to your server for availability information.</p>
+            </div>
+
+            <div class="img-container">
+              <img src="images/agent-config.png" alt="Agent Configuration" />
+              <p class="img-caption">Configure your agent's basic settings</p>
+            </div>
+
+            <div class="alert-info">
+              <strong>Server URL Format:</strong> Make sure to include the full URL with https:// prefix and no trailing
+              slash.
+            </div>
+
+            <div class="alert-info">
+              <strong>API Keys:</strong> You no longer need to provide API keys in this interface. They are now securely
+              configured through environment variables on your server.
+            </div>
+          </div>
+        </div>
+
+        <div id="step4" class="builder-step">
+          <div class="step-number">4</div>
+          <div class="step-header">
+            <i class="fas fa-check-circle"></i>
+            <h3>Review & Create</h3>
+          </div>
+
+          <div class="step-content">
+            <p>The final step is to review your configuration and create your agent:</p>
+
+            <ol>
+              <li>Review all the settings from the previous steps</li>
+              <li>Click the "Create Agent" button to submit the configuration to Elevenlabs</li>
+              <li>Wait for the agent creation process to complete (this may take a few moments)</li>
+              <li>Once created, you'll see a success message with a link to your agent in Elevenlabs</li>
+            </ol>
+
+            <div class="img-container">
+              <img src="images/agent-review.png" alt="Review and Create" />
+              <p class="img-caption">Review your configuration and click "Create Agent"</p>
+            </div>
+
+            <div class="alert-info">
+              <strong>Authentication:</strong> The request is authenticated using your server's API credentials from
+              environment variables. You don't need to provide them manually.
+            </div>
+
+            <div class="img-container">
+              <img src="images/agent-created.png" alt="Success message" />
+              <p class="img-caption">Success message after agent creation</p>
+            </div>
+
+            <div class="alert-info">
+              <strong>Note:</strong> After creation, you'll have the option to customize your agent's system prompt. We
+              recommend doing this to personalize your agent's behavior.
+            </div>
+          </div>
+        </div>
+
+        <div id="testing" class="card mb-4">
+          <div class="card-body">
+            <h3 class="mb-3">Testing Your Agent</h3>
+
+            <p>Now that your agent is created, you should test it to make sure everything is working properly:</p>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-robot me-2 text-primary"></i>Test in Elevenlabs</h5>
+                    <p>Click the "View Your Agent" link to go to your agent in Elevenlabs. You can test it directly in
+                      the interface:</p>
+                    <ol>
+                      <li>Click the "Test Agent" button</li>
+                      <li>Ask about available appointment times</li>
+                      <li>Verify that it correctly accesses your Calendly availability</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-phone me-2 text-primary"></i>Test via Phone Call</h5>
+                    <p>If you've set up a phone number for your agent in Elevenlabs:</p>
+                    <ol>
+                      <li>Call your agent's phone number</li>
+                      <li>Ask about available appointment times</li>
+                      <li>Try booking an appointment</li>
+                      <li>Verify that you receive an SMS confirmation (if Twilio is configured)</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert-info mt-3">
+              <strong>Testing SMS:</strong> To test the SMS functionality, you'll need to complete a full booking flow,
+              providing a name and confirming a specific time slot.
+            </div>
+
+            <div class="callout mt-4">
+              <div class="callout-header">Common Test Scenarios</div>
+              <p>Try these common scenarios to test your agent thoroughly:</p>
+              <ol>
+                <li>"What appointment types do you offer?"</li>
+                <li>"When are you available this week?"</li>
+                <li>"Do you have any availability on Tuesday?"</li>
+                <li>"I'd like a 30-minute strategy session."</li>
+                <li>"Can I book a time on Friday afternoon?"</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div id="next-steps" class="card mt-4">
+          <div class="card-body">
+            <h3 class="mb-3">Next Steps</h3>
+
+            <p>Congratulations on creating your Calendly booking voice agent! Here are some recommended next steps:</p>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-edit me-2 text-primary"></i>Customize Your Prompt</h5>
+                    <p>Personalize your agent's behavior and conversation style by customizing the system prompt.</p>
+                    <a href="prompt-guide.html" class="btn btn-outline-primary mt-2">System Prompt Guide</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-phone-alt me-2 text-primary"></i>Set Up Phone Number</h5>
+                    <p>Configure a phone number in Elevenlabs to allow callers to reach your agent.</p>
+                    <a href="https://help.elevenlabs.io/hc/en-us/articles/4410346035089-Setting-up-a-phone-number"
+                      target="_blank" class="btn btn-outline-primary mt-2">Elevenlabs Guide</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mt-4">
+              <div class="card-body">
+                <h5><i class="fas fa-cogs me-2 text-primary"></i>Advanced Configuration</h5>
+                <p>For more advanced configuration options, you can directly modify your agent in the Elevenlabs
+                  dashboard:</p>
+                <ol>
+                  <li>Go to your agent in Elevenlabs</li>
+                  <li>Click on "Edit Agent"</li>
+                  <li>Make adjustments to voice, conversation length, and other settings</li>
+                  <li>Save your changes</li>
+                </ol>
+                <div class="alert-warning">
+                  <strong>Note:</strong> If you modify the agent directly in Elevenlabs, be careful not to change the
+                  webhooks and function definitions, as these are essential for the Calendly integration.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

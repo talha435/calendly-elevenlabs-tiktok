@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integration Setup | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --section-padding: 5rem 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px; /* Space for footer */
+    }
+    
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+    
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-pills .nav-link:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+    
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+    
+    .documentation-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .documentation-card .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .documentation-card .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .documentation-card .btn {
+      margin-top: auto;
+    }
+    
+    .cta-section {
+      background-color: white;
+      border-radius: 15px;
+      padding: 3rem;
+      margin: 3rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+    
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-links ul li a:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+    
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+    
+    /* Code examples styling */
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    
+    code {
+      color: var(--primary-color);
+    }
+    
+    /* Table of contents */
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+    
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+    
+    /* Integration section styling */
+    .integration-section {
+      margin-bottom: 4rem;
+    }
+    
+    .integration-header {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+    
+    .integration-logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 1.5rem;
+      object-fit: contain;
+    }
+    
+    .integration-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .step-list {
+      counter-reset: step-counter;
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .step-list li {
+      position: relative;
+      margin-bottom: 2rem;
+      padding-left: 3rem;
+    }
+    
+    .step-list li:before {
+      content: counter(step-counter);
+      counter-increment: step-counter;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .step-list li h5 {
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+    
+    .img-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    .img-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    
+    .img-caption {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #6c757d;
+    }
+    
+    .alert-info {
+      background-color: rgba(37, 117, 252, 0.1);
+      border-left: 4px solid var(--secondary-color);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+    
+    .alert-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+    
+    .api-box {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px dashed #dee2e6;
+    }
+    
+    .api-box code {
+      user-select: all;
+      padding: 0.5rem;
+      background-color: #e9ecef;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Integration Setup</h1>
+      <p class="lead mb-4">Configure Calendly, Elevenlabs, GitHub, and Twilio integrations</p>
+      <a href="help.html" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Documentation</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>On This Page</h3>
+            <ul>
+              <li>
+                <a href="#overview"><i class="fas fa-info-circle"></i> Overview</a>
+              </li>
+              <li>
+                <a href="#calendly"><i class="fas fa-calendar-check"></i> Calendly Setup</a>
+              </li>
+              <li>
+                <a href="#elevenlabs"><i class="fas fa-microphone-alt"></i> Elevenlabs Setup</a>
+              </li>
+              <li>
+                <a href="#github"><i class="fab fa-github"></i> GitHub Setup</a>
+              </li>
+              <li>
+                <a href="#twilio"><i class="fas fa-sms"></i> Twilio Setup</a>
+              </li>
+              <li>
+                <a href="#testing"><i class="fas fa-vial"></i> Testing Your Integrations</a>
+              </li>
+              <li>
+                <a href="#next-steps"><i class="fas fa-arrow-right"></i> Next Steps</a>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul>
+              <li>
+                <a href="help.html"><i class="fas fa-home"></i> Documentation Home</a>
+              </li>
+              <li>
+                <a href="setup.html"><i class="fas fa-rocket"></i> Setup Guide</a>
+              </li>
+              <li>
+                <a href="integrations.html" class="active"><i class="fas fa-plug"></i> Integration Setup</a>
+              </li>
+              <li>
+                <a href="agent-builder-guide.html"><i class="fas fa-robot"></i> Agent Builder Guide</a>
+              </li>
+              <li>
+                <a href="prompt-guide.html"><i class="fas fa-edit"></i> System Prompt Guide</a>
+              </li>
+              <li>
+                <a href="technical.html"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="troubleshooting.html"><i class="fas fa-life-ring"></i> Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div id="overview" class="card mb-4">
+          <div class="card-body">
+            <h2 class="mb-4">Integration Overview</h2>
+            
+            <p>This guide will walk you through setting up all the necessary integrations for your Calendly-Elevenlabs server. You'll need to configure four main services:</p>
+            
+            <div class="row g-4 mb-3">
+              <div class="col-md-3">
+                <div class="card h-100 text-center">
+                  <div class="card-body">
+                    <img src="images/logo-calendly.png" width="50" class="mb-3" />
+                    <h5>Calendly</h5>
+                    <p class="mb-0">For appointment scheduling</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="card h-100 text-center">
+                  <div class="card-body">
+                    <img src="images/logo-elevenlabs.png" width="50" class="mb-3" />
+                    <h5>Elevenlabs</h5>
+                    <p class="mb-0">For voice agent functionality</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="card h-100 text-center">
+                  <div class="card-body">
+                    <img src="images/logo-github.png" width="50" class="mb-3" />
+                    <h5>GitHub</h5>
+                    <p class="mb-0">For prompt customization</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="card h-100 text-center">
+                  <div class="card-body">
+                    <img src="images/logo-twilio.png" width="50" class="mb-3" />
+                    <h5>Twilio</h5>
+                    <p class="mb-0">For SMS booking links</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="alert-info">
+              <strong>Pre-requisite:</strong> Before proceeding, make sure you've completed the <a href="setup.html">Server Setup</a> and have your server deployed on Render.
+            </div>
+            
+            <div class="alert-warning">
+              <strong>Important:</strong> All API keys are now configured through environment variables for improved security. You will need to set these variables in your Render deployment.
+            </div>
+            
+            <div class="alert-info">
+              <strong>Note on SMS:</strong> The SMS functionality is a critical component of the booking flow. When a caller chooses to book an appointment, they receive the final booking link via SMS to complete their reservation. Therefore, Twilio setup is required for the system to function properly.
+            </div>
+          </div>
+        </div>
+        
+        <div id="calendly" class="integration-section">
+          <div class="integration-header">
+            <img src="images/logo-calendly.png" class="integration-logo" alt="Calendly logo" />
+            <h3 class="mb-0">Calendly Integration</h3>
+          </div>
+          
+          <div class="integration-content">
+            <p>Calendly is the scheduling platform that powers your appointment booking functionality. You'll need to set up your Calendly account and obtain an API token to add to your environment variables.</p>
+            
+            <ol class="step-list">
+              <li>
+                <h5>Create Appointment Types</h5>
+                <p>Before configuring the integration, make sure you have at least one (ideally two) appointment types set up in your Calendly account:</p>
+                <ul>
+                  <li>A 15-minute appointment type (e.g., "Initial Consultation")</li>
+                  <li>A 30-minute appointment type (e.g., "Discovery Call")</li>
+                </ul>
+                <div class="img-container">
+                  <img src="images/calendly-event-types.png" alt="Creating Calendly event types" />
+                  <p class="img-caption">Set up at least two event types with different durations</p>
+                </div>
+              </li>
+              
+              <li>
+                <h5>Get Your Calendly API Token</h5>
+                <p>To connect your Calendly account to the integration server, you'll need an API token:</p>
+                <ol type="a">
+                  <li>Log in to your Calendly account</li>
+                  <li>Click on your profile icon in the top-right corner</li>
+                  <li>Select "Integrations"</li>
+                  <li>Scroll down to the "API & Webhooks" section</li>
+                  <li>Click on "Generate new token"</li>
+                  <li>Give your token a name (e.g., "Voice Agent Integration")</li>
+                  <li>Click "Generate token"</li>
+                  <li>Copy your token and save it in a secure location</li>
+                </ol>
+                <div class="img-container">
+                  <img src="images/calendly-api.png" alt="Generating a Calendly API token" />
+                  <p class="img-caption">The API token will only be shown once, so make sure to copy it</p>
+                </div>
+              </li>
+              
+              <li>
+                <h5>Add Token to Environment Variables</h5>
+                <p>Now, add your Calendly API token to your Render environment variables:</p>
+                <ol type="a">
+                  <li>Go to your Render dashboard</li>
+                  <li>Select your Calendly-Elevenlabs Integration service</li>
+                  <li>Go to the "Environment" tab</li>
+                  <li>Add or update the <code>CALENDLY_API_TOKEN</code> environment variable with your token</li>
+                  <li>Click "Save Changes"</li>
+                  <li>Restart your service using the "Manual Deploy" button</li>
+                </ol>
+                <div class="api-box">
+                  <p><strong>Your Calendly API Token should look something like:</strong></p>
+                  <code>eyJraWQiOiIxMDciLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...</code>
+                </div>
+              </li>
+            </ol>
+            
+            <div class="alert-warning">
+              <strong>Important:</strong> Keep your API token secure and never share it publicly. If your token is compromised, generate a new one immediately and update your environment variables.
+            </div>
+          </div>
+        </div>
+        
+        <div id="elevenlabs" class="integration-section">
+          <div class="integration-header">
+            <img src="images/logo-elevenlabs.png" class="integration-logo" alt="Elevenlabs logo" />
+            <h3 class="mb-0">Elevenlabs Integration</h3>
+          </div>
+          
+          <div class="integration-content">
+            <p>Elevenlabs provides the voice agent capabilities for your booking assistant. You'll need to set up an account and get an API key.</p>
+            
+            <ol class="step-list">
+              <li>
+                <h5>Create an Elevenlabs Account</h5>
+                <p>If you haven't already, sign up for an Elevenlabs account:</p>
+                <ol type="a">
+                  <li>Go to <a href="https://elevenlabs.io/sign-up" target="_blank">elevenlabs.io/sign-up</a></li>
+                  <li>Create an account using your email or Google/GitHub account</li>
+                  <li>Verify your email if necessary</li>
+                </ol>
+              </li>
+              
+              <li>
+                <h5>Subscribe to a Suitable Plan</h5>
+                <p>To use voice agents, you'll need at least the Starter plan or above:</p>
+                <ol type="a">
+                  <li>Go to the <a href="https://elevenlabs.io/pricing" target="_blank">Pricing page</a></li>
+                  <li>Select a plan that includes voice agents (Starter, Growth, or Enterprise)</li>
+                  <li>Complete the subscription process</li>
+                </ol>
+                <div class="img-container">
+                  <img src="images/elevenlabs-pricing.png" alt="Elevenlabs pricing plans" />
+                  <p class="img-caption">The Starter plan is sufficient for most use cases</p>
+                </div>
+                <div class="alert-info">
+                  <strong>Note:</strong> Elevenlabs may offer free trials or promotional offers for new users.
+                </div>
+              </li>
+              
+              <li>
+                <h5>Get Your Elevenlabs API Key</h5>
+                <p>To connect your Elevenlabs account to the integration server:</p>
+                <ol type="a">
+                  <li>Log in to your Elevenlabs account</li>
+                  <li>Click on your profile icon in the top-right corner</li>
+                  <li>Select "Profile"</li>
+                  <li>In the left sidebar, click on "API Keys"</li>
+                  <li>Click "Create New API Key"</li>
+                  <li>Give your key a name (e.g., "Calendly Integration")</li>
+                  <li>Copy your API key and save it in a secure location</li>
+                </ol>
+                <div class="img-container">
+                  <img src="images/elevenlabs-api.png" alt="Getting an Elevenlabs API key" />
+                  <p class="img-caption">The API key will only be shown once, so make sure to copy it</p>
+                </div>
+              </li>
+              
+              <li>
+                <h5>Add API Key to Environment Variables</h5>
+                <p>Now, add your Elevenlabs API key to your Render environment variables:</p>
+                <ol type="a">
+                  <li>Go to your Render dashboard</li>
+                  <li>Select your Calendly-Elevenlabs Integration service</li>
+                  <li>Go to the "Environment" tab</li>
+                  <li>Add or update the <code>ELEVENLABS_API_KEY</code> environment variable with your key</li>
+                  <li>Click "Save Changes"</li>
+                  <li>Restart your service using the "Manual Deploy" button</li>
+                </ol>
+                <div class="api-box">
+                  <p><strong>Your Elevenlabs API Key should look something like:</strong></p>
+                  <code>sk_d8e7dfc3f8d4b7a3e2c1</code>
+                </div>
+              </li>
+              
+              <li>
+                <h5>Setup a Voice Agent Phone Number (Recommended)</h5>
+                <p>For callers to reach your agent via phone, you'll need to set up a phone number in Elevenlabs:</p>
+                <ol type="a">
+                  <li>In your Elevenlabs account, go to "Voice Agents"</li>
+                  <li>Click on "Phone Numbers"</li>
+                  <li>Click "Add Phone Number"</li>
+                  <li>Select "Twilio" as the provider</li>
+                  <li>Follow the instructions to connect your Twilio account</li>
+                  <li>Select a phone number to use with your agent</li>
+                </ol>
+                <div class="alert-info">
+                  <strong>Note:</strong> This step requires a Twilio account with a phone number. See the Twilio setup section below.
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        
+        <div id="github" class="integration-section">
+          <div class="integration-header">
+            <img src="images/logo-github.png" class="integration-logo" alt="GitHub logo" />
+            <h3 class="mb-0">GitHub Integration</h3>
+          </div>
+          
+          <div class="integration-content">
+            <p>GitHub integration is required for the Prompt Builder functionality, which allows you to customize your agent's system prompt and save it directly to your repository.</p>
+            
+            <ol class="step-list">
+              <li>
+                <h5>Create a GitHub Personal Access Token</h5>
+                <p>To allow the application to update files in your repository:</p>
+                <ol type="a">
+                  <li>Log in to your GitHub account</li>
+                  <li>Click on your profile picture in the top-right corner</li>
+                  <li>Select "Settings"</li>
+                  <li>In the left sidebar, click on "Developer settings"</li>
+                  <li>Click on "Personal access tokens" and then "Tokens (classic)"</li>
+                  <li>Click "Generate new token" and select "Generate new token (classic)"</li>
+                  <li>Give your token a descriptive name (e.g., "Calendly Voice Agent Prompt Builder")</li>
+                  <li>Set an expiration date (e.g., 90 days or longer)</li>
+                  <li>Select the <strong>repo</strong> scope checkbox (this gives access to your repositories)</li>
+                  <li>Scroll down and click "Generate token"</li>
+                  <li>Copy your new token immediately - it will only be shown once!</li>
+                </ol>
+                <div class="img-container">
+                  <img src="images/github-token.png" alt="Creating a GitHub Personal Access Token" />
+                  <p class="img-caption">Make sure to select the "repo" scope for your token</p>
+                </div>
+                <div class="alert-warning">
+                  <strong>Important:</strong> This token gives access to your repositories, so keep it secure! Treat it like a password.
+                </div>
+              </li>
+              
+              <li>
+                <h5>Add GitHub Configuration to Environment Variables</h5>
+                <p>Now, add your GitHub token and repository details to your Render environment variables:</p>
+                <ol type="a">
+                  <li>Go to your Render dashboard</li>
+                  <li>Select your Calendly-Elevenlabs Integration service</li>
+                  <li>Go to the "Environment" tab</li>
+                  <li>Add the following environment variables:
+                    <ul>
+                      <li><code>GITHUB_TOKEN</code>: Your personal access token</li>
+                      <li><code>GITHUB_REPO_OWNER</code>: Your GitHub username</li>
+                      <li><code>GITHUB_REPO_NAME</code>: Name of your forked repository</li>
+                      <li><code>GITHUB_BRANCH</code>: Your repository's branch (usually "master" or "main")</li>
+                    </ul>
+                  </li>
+                  <li>Click "Save Changes"</li>
+                  <li>Restart your service using the "Manual Deploy" button</li>
+                </ol>
+                <div class="api-box">
+                  <p><strong>Example GitHub configuration:</strong></p>
+                  <p><code>GITHUB_TOKEN</code>: <code>ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890</code></p>
+                  <p><code>GITHUB_REPO_OWNER</code>: <code>yourusername</code></p>
+                  <p><code>GITHUB_REPO_NAME</code>: <code>calendly-elevenlabs-server</code></p>
+                  <p><code>GITHUB_BRANCH</code>: <code>master</code></p>
+                </div>
+              </li>
+            </ol>
+            
+            <div class="alert-info">
+              <strong>Why This Integration?</strong> The GitHub integration allows the Prompt Builder to save your customized system prompt directly to your repository's codebase. This makes it easy to update your agent's behavior without editing code manually.
+            </div>
+            
+            <div class="alert-warning">
+              <strong>Security Note:</strong> The GitHub token is stored securely in your environment variables. When your token expires, you'll need to generate a new one and update the <code>GITHUB_TOKEN</code> environment variable.
+            </div>
+          </div>
+        </div>
+        
+        <div id="twilio" class="integration-section">
+          <div class="integration-header">
+            <img src="images/logo-twilio.png" class="integration-logo" alt="Twilio logo" />
+            <h3 class="mb-0">Twilio Setup</h3>
+          </div>
+          
+          <div class="integration-content">
+            <p>Twilio enables SMS notifications for booking confirmations. This integration is <strong>required</strong> because the booking link is sent to callers via SMS to complete their reservation.</p>
+            
+            <div class="alert-info mb-4">
+              <strong>Why Twilio is Required:</strong> When a caller decides to book an appointment, the system sends them a unique booking link via SMS. Without SMS functionality, callers won't be able to complete their bookings.
+            </div>
+            
+            <ol class="step-list">
+              <li>
+                <h5>Create a Twilio Account</h5>
+                <p>If you haven't already, sign up for a Twilio account:</p>
+                <ol type="a">
+                  <li>Go to <a href="https://www.twilio.com/try-twilio" target="_blank">twilio.com/try-twilio</a></li>
+                  <li>Create an account using your email</li>
+                  <li>Verify your email and phone number</li>
+                  <li>Complete the account setup process</li>
+                </ol>
+              </li>
+              
+              <li>
+                <h5>Get a Twilio Phone Number</h5>
+                <p>You'll need a phone number to send SMS messages:</p>
+                <ol type="a">
+                  <li>In your Twilio dashboard, go to "Phone Numbers" > "Manage" > "Buy a Number"</li>
+                  <li>Search for a number with SMS capabilities in your desired country</li>
+                  <li>Purchase the number (Twilio typically offers a free trial credit)</li>
+                </ol>
+                <div class="img-container">
+                  <img src="images/twilio-numbers.png" alt="Buying a Twilio phone number" />
+                  <p class="img-caption">Make sure the number has SMS capabilities</p>
+                </div>
+              </li>
+              
+              <li>
+                <h5>Get Your Twilio Credentials</h5>
+                <p>You'll need three pieces of information from your Twilio account:</p>
+                <ol type="a">
+                  <li>In your Twilio dashboard, go to the "Account Info" section</li>
+                  <li>Find your "Account SID" and copy it</li>
+                  <li>Find your "Auth Token" and copy it</li>
+                  <li>Note down your Twilio phone number (include the country code, e.g., +1234567890)</li>
+                </ol>
+                <div class="api-box">
+                  <p><strong>Your Twilio credentials should look something like:</strong></p>
+                  <p><strong>Account SID:</strong> <code>ACd123456789abcdef123456789abcdef</code></p>
+                  <p><strong>Auth Token:</strong> <code>a123456789abcdef123456789abcdef</code></p>
+                  <p><strong>Phone Number:</strong> <code>+1234567890</code></p>
+                </div>
+              </li>
+              
+              <li>
+                <h5>Add Credentials to Environment Variables</h5>
+                <p>Now, add your Twilio credentials to your Render environment variables:</p>
+                <ol type="a">
+                  <li>Go to your Render dashboard</li>
+                  <li>Select your Calendly-Elevenlabs Integration service</li>
+                  <li>Go to the "Environment" tab</li>
+                  <li>Add the following environment variables:
+                    <ul>
+                      <li><code>ENABLE_SMS=true</code></li>
+                      <li><code>TWILIO_ACCOUNT_SID=your_account_sid</code></li>
+                      <li><code>TWILIO_AUTH_TOKEN=your_auth_token</code></li>
+                      <li><code>TWILIO_PHONE_NUMBER=your_phone_number</code></li>
+                    </ul>
+                  </li>
+                  <li>Click "Save Changes"</li>
+                  <li>Restart your service using the "Manual Deploy" button</li>
+                </ol>
+              </li>
+            </ol>
+            
+            <div class="alert-warning">
+              <strong>Important:</strong> Twilio charges for SMS messages and phone numbers after your free trial credits are used. Check their pricing page for current rates.
+            </div>
+          </div>
+        </div>
+        
+        <div id="testing" class="card mb-4">
+          <div class="card-body">
+            <h3 class="mb-3">Testing Your Integrations</h3>
+            
+            <p>Once you've set up all integrations, you should test them to make sure everything is working properly:</p>
+            
+            <div class="row g-4">
+              <div class="col-md-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-calendar-check me-2 text-primary"></i>Test Calendly</h5>
+                    <p>Visit your server URL and access the Agent Builder page (you'll need to enter your admin password). The system should automatically detect your Calendly event types.</p>
+                    <div class="alert-info">
+                      <small>This confirms your Calendly API token is working correctly.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-robot me-2 text-primary"></i>Test Agent Builder</h5>
+                    <p>Go through the agent creation process to create your Elevenlabs voice agent.</p>
+                    <div class="alert-info">
+                      <small>This confirms your Elevenlabs API key is working correctly.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fab fa-github me-2 text-primary"></i>Test GitHub</h5>
+                    <p>Use the Prompt Builder to make a small change to your system prompt and save it.</p>
+                    <div class="alert-info">
+                      <small>This confirms your GitHub token has the correct permissions.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-sms me-2 text-primary"></i>Test SMS</h5>
+                    <p>Complete a full booking flow with your agent to test the SMS functionality. You should receive a booking link via SMS.</p>
+                    <div class="alert-info">
+                      <small>This confirms your Twilio integration is working correctly.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="alert-info mt-4">
+              <strong>Authentication Note:</strong> Admin pages (like the Agent Builder) are now protected with Basic Authentication. You'll need to enter any username (e.g., "admin") and the password you set in the <code>ADMIN_PASSWORD</code> environment variable.
+            </div>
+          </div>
+        </div>
+        
+        <div id="next-steps" class="card mt-4">
+          <div class="card-body">
+            <h3 class="mb-3">Next Steps</h3>
+            
+            <p>Great job! You've configured all the necessary integrations for your Calendly-Elevenlabs system. Here's what to do next:</p>
+            
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-robot me-2 text-primary"></i>Create Your Agent</h5>
+                    <p>Use the Agent Builder to create and configure your voice agent.</p>
+                    <a href="agent-builder-guide.html" class="btn btn-outline-primary mt-2">Agent Builder Guide</a>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-edit me-2 text-primary"></i>Customize Your Prompt</h5>
+                    <p>Configure your agent's system prompt for optimal conversation flow.</p>
+                    <a href="prompt-guide.html" class="btn btn-outline-primary mt-2">System Prompt Guide</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

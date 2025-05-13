@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Prompt Guide | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --section-padding: 5rem 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px;
+      /* Space for footer */
+    }
+
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    .documentation-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .documentation-card .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .documentation-card .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .documentation-card .btn {
+      margin-top: auto;
+    }
+
+    .cta-section {
+      background-color: white;
+      border-radius: 15px;
+      padding: 3rem;
+      margin: 3rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .quick-links ul li a:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+
+    /* Code examples styling */
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    code {
+      color: var(--primary-color);
+    }
+
+    /* Table of contents */
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    /* Section styling */
+    .content-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .section-header i {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .img-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .img-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .img-caption {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #6c757d;
+    }
+
+    .alert-info {
+      background-color: rgba(37, 117, 252, 0.1);
+      border-left: 4px solid var(--secondary-color);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .alert-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .alert-success {
+      background-color: rgba(25, 135, 84, 0.1);
+      border-left: 4px solid #198754;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .prompt-section {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px dashed #dee2e6;
+    }
+
+    .prompt-section h5 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .github-section {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .github-form {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-card {
+      height: 100%;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">System Prompt Guide</h1>
+      <p class="lead mb-4">Customize your agent's behavior and conversation style</p>
+      <a href="help.html" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Documentation</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>On This Page</h3>
+            <ul>
+              <li>
+                <a href="#overview"><i class="fas fa-info-circle"></i> Overview</a>
+              </li>
+              <li>
+                <a href="#understanding"><i class="fas fa-lightbulb"></i> Understanding System Prompts</a>
+              </li>
+              <li>
+                <a href="#environment-variables"><i class="fas fa-key"></i> Environment Variables Setup</a>
+              </li>
+              <li>
+                <a href="#prompt-builder"><i class="fas fa-tools"></i> Using the Prompt Builder</a>
+              </li>
+              <li>
+                <a href="#customizing"><i class="fas fa-edit"></i> Customizing Your Prompt</a>
+              </li>
+              <li>
+                <a href="#advanced"><i class="fas fa-code"></i> Advanced Techniques</a>
+              </li>
+              <li>
+                <a href="#examples"><i class="fas fa-list"></i> Example Prompts</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul>
+              <li>
+                <a href="help.html"><i class="fas fa-home"></i> Documentation Home</a>
+              </li>
+              <li>
+                <a href="setup.html"><i class="fas fa-rocket"></i> Setup Guide</a>
+              </li>
+              <li>
+                <a href="integrations.html"><i class="fas fa-plug"></i> Integration Setup</a>
+              </li>
+              <li>
+                <a href="agent-builder-guide.html"><i class="fas fa-robot"></i> Agent Builder Guide</a>
+              </li>
+              <li>
+                <a href="prompt-guide.html" class="active"><i class="fas fa-edit"></i> System Prompt Guide</a>
+              </li>
+              <li>
+                <a href="technical.html"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="troubleshooting.html"><i class="fas fa-life-ring"></i> Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div id="overview" class="card mb-4">
+          <div class="card-body">
+            <h2 class="mb-4">System Prompt Overview</h2>
+
+            <p>The system prompt is the most powerful way to customize your Calendly booking agent's behavior,
+              conversation style, and capabilities. It acts as instructions that tell the AI how to respond to callers
+              and handle scheduling scenarios.</p>
+
+            <div class="row g-4 mt-3">
+              <div class="col-md-4">
+                <div class="card h-100">
+                  <div class="card-body feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-brain"></i>
+                    </div>
+                    <h5>Control Behavior</h5>
+                    <p>Define how your agent handles scheduling requests and calendar availability.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card h-100">
+                  <div class="card-body feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h5>Shape Conversation</h5>
+                    <p>Customize conversation flow, language style, and personality traits.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card h-100">
+                  <div class="card-body feature-card">
+                    <div class="feature-icon">
+                      <i class="fas fa-building"></i>
+                    </div>
+                    <h5>Brand Alignment</h5>
+                    <p>Align your agent with your company's voice, values, and service offerings.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert-info mt-4">
+              <strong>Dynamic Variables:</strong> The system prompt supports dynamic variables like
+              <code>{{current_date}}</code>, <code>{{current_time}}</code>, and <code>{{caller_number}}</code> that are
+              automatically updated for each call.
+            </div>
+
+            <div class="alert-info">
+              <strong>Authentication Required:</strong> The Prompt Builder is a protected admin page. You'll need to
+              enter any username (it doesn't matter what) and the password you set in the <code>ADMIN_PASSWORD</code>
+              environment variable when prompted by your browser.
+            </div>
+          </div>
+        </div>
+
+        <div id="understanding" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-lightbulb"></i> Understanding System Prompts</h3>
+          </div>
+
+          <p>A system prompt serves as instructions to the AI model powering your voice agent. Think of it as a detailed
+            job description that tells the AI:</p>
+
+          <ul>
+            <li>Who it is (its identity and role)</li>
+            <li>What it knows (available meeting types, company details)</li>
+            <li>How it should communicate (conversation style, tone)</li>
+            <li>What processes to follow (booking flow, handling preferences)</li>
+          </ul>
+
+          <p>The default system prompt in this integration is structured with several key sections:</p>
+
+          <div class="prompt-section">
+            <h5>Identity & Purpose</h5>
+            <p>Defines the agent as a booking assistant for your company and establishes its core purpose.</p>
+            <pre><code># Identity & Purpose
+
+You are a friendly, professional booking assistant for Bramforth.ai, a specialized AI agency focusing on bespoke AI integrations, conversational agents, automation solutions, agentive workflows, and strategies to increase business efficiency and profitability.
+
+Today's date is {{current_date}} and the current time is {{current_time}}.</code></pre>
+          </div>
+
+          <div class="prompt-section">
+            <h5>Available Meeting Types</h5>
+            <p>Describes the types of appointments callers can book.</p>
+            <pre><code># Available Meeting Types
+
+You offer two types of meetings:
+- 15-minute Initial Consultation: A brief introduction to discuss potential client needs
+- 30-minute Strategy Session: A more detailed exploration of specific AI solutions</code></pre>
+          </div>
+
+          <div class="prompt-section">
+            <h5>Booking Process & Guidelines</h5>
+            <p>Outlines the steps the agent should follow when handling bookings.</p>
+            <pre><code># Your Booking Process
+
+Your primary goal is to help callers schedule the right type of appointment efficiently while maintaining a natural, helpful conversation. Follow these steps:
+
+1. Warmly greet the caller and briefly explain who you are
+2. Ask what type of meeting they'd prefer (15 or 30 minutes)
+3. Check availability for their preferred date using the checkAvailability function
+4. Present available time slots naturally (see guidelines below)
+5. Confirm booking details clearly
+6. Send a scheduling link via SMS and explain next steps</code></pre>
+          </div>
+
+          <div class="alert-success">
+            <strong>Best Practice:</strong> The system prompt is organized into clear sections with headings (e.g., "#
+            Identity & Purpose") to help the AI understand and follow the instructions effectively.
+          </div>
+        </div>
+
+        <div id="environment-variables" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-key"></i> Environment Variables Setup</h3>
+          </div>
+
+          <p>Before using the Prompt Builder, you need to configure GitHub environment variables on your server. These
+            variables allow the Prompt Builder to save changes to your system prompt file in your GitHub repository.</p>
+
+          <ol>
+            <li>
+              <strong>Create a GitHub Personal Access Token</strong>
+              <p>Go to <a href="https://github.com/settings/tokens"
+                  target="_blank">https://github.com/settings/tokens</a> and click "Generate new token" (classic).</p>
+              <p>Give your token a name (e.g., "Calendly Prompt Builder"), set an expiration date, and select the
+                <strong>repo</strong> scope.</p>
+              <div class="img-container">
+                <img src="images/github-api.png" alt="GitHub token settings" />
+                <p class="img-caption">Select the "repo" scope to allow editing of repository contents</p>
+              </div>
+              <p>Click "Generate token" and immediately copy the generated token (you won't be able to see it again).
+              </p>
+            </li>
+
+            <li>
+              <strong>Add Environment Variables to Render</strong>
+              <p>In your Render dashboard, select your Calendly-Elevenlabs Integration service, go to the "Environment"
+                tab, and add the following variables:</p>
+              <ul>
+                <li><code>GITHUB_TOKEN</code>: Your GitHub Personal Access Token</li>
+                <li><code>GITHUB_REPO_OWNER</code>: Your GitHub username</li>
+                <li><code>GITHUB_REPO_NAME</code>: Name of your forked repository</li>
+                <li><code>GITHUB_BRANCH</code>: Branch name (usually "master" or "main")</li>
+              </ul>
+              <p>Click "Save Changes" and restart your service using the "Manual Deploy" button.</p>
+            </li>
+          </ol>
+
+          <div class="alert-warning">
+            <strong>Important:</strong> Keep your GitHub token secure. If your token is compromised, generate a new one
+            immediately and update your environment variables.
+          </div>
+
+          <div class="alert-info">
+            <strong>Why Environment Variables?</strong> Storing sensitive credentials in environment variables provides
+            better security than transmitting them in request bodies or storing them in client-side code.
+          </div>
+        </div>
+
+        <div id="prompt-builder" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-tools"></i> Using the Prompt Builder</h3>
+          </div>
+
+          <p>The Prompt Builder is a user-friendly interface for customizing your agent's system prompt without editing
+            code directly:</p>
+
+          <ol>
+            <li>
+              <strong>Access the Prompt Builder</strong>
+              <p>After creating your agent, click the "Customize System Prompt" button, or navigate to the Prompt
+                Builder from the home page.</p>
+              <p>You'll be prompted for authentication - enter any username (e.g., "admin") and the password you set in
+                the <code>ADMIN_PASSWORD</code> environment variable.</p>
+            </li>
+
+            <li>
+              <strong>Edit the System Prompt</strong>
+              <p>The editor will display the current system prompt with your Calendly event URIs automatically included.
+                Customize the content to match your business and preferences.</p>
+              <div class="img-container">
+                <img src="images/system-prompt-builder.png" alt="Prompt Builder editor" />
+                <p class="img-caption">The system prompt editor with the default template</p>
+              </div>
+            </li>
+
+            <li>
+              <strong>Save Your Changes</strong>
+              <p>Click the "Save Changes" button to update the prompt file in your repository. This will trigger a
+                redeploy of your server with the new prompt.</p>
+              <div class="alert-info">
+                <strong>Note:</strong> After saving, it may take a few minutes for your server to redeploy with the
+                updated prompt.
+              </div>
+            </li>
+          </ol>
+
+          <div class="alert-success">
+            <strong>Pro Tip:</strong> The Prompt Builder automatically uses your GitHub credentials from environment
+            variables, so you don't need to enter them manually.
+          </div>
+        </div>
+
+        <div id="customizing" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-edit"></i> Customizing Your Prompt</h3>
+          </div>
+
+          <p>Here are key sections of the system prompt you should customize for your business:</p>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5><i class="fas fa-building me-2 text-primary"></i>Company Information</h5>
+              <p>Update the company name and description to match your business:</p>
+              <pre><code>You are a friendly, professional booking assistant for [YOUR COMPANY NAME], a [YOUR COMPANY DESCRIPTION].</code></pre>
+              <div class="alert-info">
+                <strong>Example:</strong> "You are a friendly, professional booking assistant for TechSolutions Inc., a
+                software development agency specializing in custom mobile applications and web solutions."
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5><i class="fas fa-calendar-alt me-2 text-primary"></i>Meeting Types</h5>
+              <p>Customize the names and descriptions of your meeting types:</p>
+              <pre><code># Available Meeting Types
+
+You offer two types of meetings:
+- [MEETING TYPE 1 NAME]: [BRIEF DESCRIPTION]
+- [MEETING TYPE 2 NAME]: [BRIEF DESCRIPTION]</code></pre>
+              <div class="alert-info">
+                <strong>Example:</strong> "- 30-minute Website Consultation: A focused session to discuss website needs
+                and potential solutions"
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5><i class="fas fa-comments me-2 text-primary"></i>Conversation Style</h5>
+              <p>Adjust the conversation style to match your brand voice:</p>
+              <pre><code># Conversation Style
+
+Be [ADJECTIVE 1], [ADJECTIVE 2], and [ADJECTIVE 3] with these qualities:
+- [COMMUNICATION STYLE 1]
+- [COMMUNICATION STYLE 2]
+- [COMMUNICATION STYLE 3]</code></pre>
+              <div class="alert-info">
+                <strong>Example:</strong> "Be friendly, informative, and efficient with these qualities: - Use technical
+                language when appropriate for knowledgeable callers - Keep explanations clear and concise..."
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-warning">
+            <strong>Important:</strong> Do not modify the sections related to tool usage instructions or date handling,
+            as these are essential for the agent's functionality.
+          </div>
+        </div>
+
+        <div id="advanced" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-code"></i> Advanced Techniques</h3>
+          </div>
+
+          <p>For more sophisticated customization, consider these advanced techniques:</p>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5><i class="fas fa-user-tie me-2 text-primary"></i>Industry-Specific Language</h5>
+                  <p>Include industry terminology relevant to your business:</p>
+                  <pre><code># Industry Knowledge
+
+You are familiar with these industry terms:
+- [TERM 1]: [DEFINITION]
+- [TERM 2]: [DEFINITION]
+- [TERM 3]: [DEFINITION]</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5><i class="fas fa-question-circle me-2 text-primary"></i>FAQ Handling</h5>
+                  <p>Prepare responses for common questions:</p>
+                  <pre><code># Frequently Asked Questions
+
+When callers ask the following questions, 
+respond as indicated:
+
+Q: "What services do you offer?"
+A: [YOUR ANSWER]
+
+Q: "How much do your services cost?"
+A: [YOUR ANSWER]</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5><i class="fas fa-route me-2 text-primary"></i>Alternative Conversation Flows</h5>
+                  <p>Define different paths for various scenarios:</p>
+                  <pre><code># Alternative Flows
+
+If the caller is a returning client:
+- Acknowledge their previous booking
+- Ask if they want a similar session
+
+If the caller is in a hurry:
+- Skip detailed explanations
+- Focus on available times quickly</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5><i class="fas fa-theater-masks me-2 text-primary"></i>Personality Traits</h5>
+                  <p>Define a distinctive personality for your agent:</p>
+                  <pre><code># Personality
+
+You have these personality traits:
+- [TRAIT 1]: [DESCRIPTION]
+- [TRAIT 2]: [DESCRIPTION]
+- [TRAIT 3]: [DESCRIPTION]
+
+Your communication style is 
+[STYLE DESCRIPTION].</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-success mt-4">
+            <strong>Pro Tip:</strong> Test your agent thoroughly after making significant changes to ensure it behaves
+            as expected and follows your customized instructions.
+          </div>
+        </div>
+
+        <div id="examples" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-list"></i> Example Prompts</h3>
+          </div>
+
+          <p>Here are some industry-specific examples to inspire your prompt customization:</p>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                  Legal Consultation
+                </div>
+                <div class="card-body">
+                  <pre><code># Identity & Purpose
+
+You are a professional booking assistant for Hamilton Legal Group, a boutique law firm specializing in business law, intellectual property, and contract negotiation.
+
+# Available Meeting Types
+
+You offer two types of meetings:
+- 15-minute Case Evaluation: A brief assessment to determine legal needs
+- 45-minute Legal Consultation: A comprehensive discussion with one of our attorneys
+
+# Conversation Style
+
+Be professional, courteous, and discreet with these qualities:
+- Use formal language without legal jargon
+- Maintain confidentiality in all discussions
+- Express empathy while remaining objective</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                  Fitness Coaching
+                </div>
+                <div class="card-body">
+                  <pre><code># Identity & Purpose
+
+You are an energetic booking assistant for FitLife Training, a personal fitness coaching service specializing in customized workout plans and nutrition guidance.
+
+# Available Meeting Types
+
+You offer two types of sessions:
+- 20-minute Fitness Assessment: A quick evaluation of goals and current fitness
+- 45-minute Strategy Session: A detailed planning session with a personal trainer
+
+# Conversation Style
+
+Be enthusiastic, motivating, and approachable with these qualities:
+- Use encouraging language to build rapport
+- Maintain a positive, can-do attitude
+- Be conversational and friendly while remaining professional</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                  IT Consulting
+                </div>
+                <div class="card-body">
+                  <pre><code># Identity & Purpose
+
+You are a helpful booking assistant for TechSolutions Inc., an IT consulting firm specializing in cloud migration, cybersecurity, and digital transformation for small to medium businesses.
+
+# Available Meeting Types
+
+You offer two types of meetings:
+- 30-minute Tech Assessment: An initial review of current systems and challenges
+- 60-minute Solution Planning: A comprehensive session to develop a technology roadmap
+
+# Conversation Style
+
+Be knowledgeable, efficient, and adaptable with these qualities:
+- Adjust technical language based on caller's expertise level
+- Focus on understanding specific IT challenges
+- Express confidence in our team's ability to solve complex problems
+
+# Industry Knowledge
+
+You are familiar with these IT concepts:
+- Cloud Services: Including AWS, Azure, and Google Cloud offerings
+- Cybersecurity: Including threat assessment, penetration testing, and security policies
+- Digital Transformation: Including process automation, data analytics, and collaborative tools
+
+# Common Questions
+
+When callers ask about pricing, explain that rates depend on project scope and requirements, which will be discussed during the consultation.</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="next-steps" class="card mt-4">
+          <div class="card-body">
+            <h3 class="mb-3">Next Steps</h3>
+
+            <p>Now that you've customized your system prompt, you can:</p>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-vial me-2 text-primary"></i>Test Your Agent</h5>
+                    <p>Test your agent to see how your customized prompt affects its behavior.</p>
+                    <a href="agent-builder-guide.html#testing" class="btn btn-outline-primary mt-2">Testing Guide</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-bullhorn me-2 text-primary"></i>Share Your Agent</h5>
+                    <p>Start using your agent with real callers or share it with your team.</p>
+                    <a href="https://elevenlabs.io/voice-agents" target="_blank"
+                      class="btn btn-outline-primary mt-2">Elevenlabs Dashboard</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert-info mt-4">
+              <strong>Remember:</strong> You can come back to the Prompt Builder anytime to make further adjustments to
+              your agent's behavior and conversation style.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

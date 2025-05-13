@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Guidelines | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --section-padding: 5rem 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px; /* Space for footer */
+    }
+    
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+    
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-pills .nav-link:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+    
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+    
+    .documentation-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .documentation-card .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .documentation-card .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .documentation-card .btn {
+      margin-top: auto;
+    }
+    
+    .cta-section {
+      background-color: white;
+      border-radius: 15px;
+      padding: 3rem;
+      margin: 3rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+    
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-links ul li a:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+    
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .architecture-diagram {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+    
+    .architecture-diagram img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+    
+    /* Code examples styling */
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    
+    code {
+      color: var(--primary-color);
+    }
+    
+    /* Table of contents */
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+    
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    /* Security checklist styling */
+    .security-checklist {
+      background-color: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .security-checklist .checklist-item {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background-color 0.2s;
+    }
+
+    .security-checklist .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .security-checklist .checklist-item:hover {
+      background-color: rgba(106, 17, 203, 0.05);
+    }
+
+    .security-checklist .checklist-icon {
+      font-size: 1.5rem;
+      color: #6ac259;
+      margin-right: 1rem;
+    }
+
+    .security-alert {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+    }
+
+    .security-alert i {
+      color: #ffc107;
+      margin-right: 0.5rem;
+    }
+
+    .success-alert {
+      background-color: rgba(40, 167, 69, 0.1);
+      border-left: 4px solid #28a745;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+    }
+
+    .success-alert i {
+      color: #28a745;
+      margin-right: 0.5rem;
+    }
+
+    .code-generator {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--card-shadow);
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Security Guidelines</h1>
+      <p class="lead mb-4">Simple, practical security for your Calendly-Elevenlabs Integration</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul class="nav flex-column nav-pills">
+              <li class="nav-item">
+                <a class="nav-link" href="help.html">Overview</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="setup.html">Setup Guide</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="integrations.html">Integration Setup</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="agent-builder-guide.html">Agent Builder Guide</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="prompt-guide.html">System Prompt Guide</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="technical.html">Technical Reference</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="security.html">Security Guidelines</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="quick-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li>
+                <a href="/agent-builder.html"><i class="fas fa-robot"></i> Agent Builder</a>
+              </li>
+              <li>
+                <a href="/prompt-builder.html"><i class="fas fa-edit"></i> Prompt Builder</a>
+              </li>
+              <li>
+                <a href="https://github.com/jammm1n/calendly-elevenlabs-server-tiktok" target="_blank">
+                  <i class="fab fa-github"></i> GitHub Repository
+                </a>
+              </li>
+              <li>
+                <a href="https://www.tiktok.com/@ai_entrepreneur_educator" target="_blank">
+                  <i class="fab fa-youtube"></i> Tutorial Videos
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div id="security-overview">
+          <h2 class="mb-4">Security Best Practices</h2>
+          
+          <div class="card mb-4">
+            <div class="card-body">
+              <h3>Security for Your Integration</h3>
+              <p>This application includes several security features to protect your API keys, personal data, and server from potential misuse. Since you're self-hosting this application, understanding these basic security concepts will help keep your integration safe and reliable.</p>
+              
+              <div class="security-alert">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> This application handles your Calendly data and Elevenlabs voice agent. While it's designed for educational purposes, following these security practices is still important to protect your accounts and data.
+              </div>
+              
+              <p>The good news is that security doesn't have to be complicated. This guide will walk you through simple steps to ensure your deployment is properly secured.</p>
+            </div>
+          </div>
+          
+          <div class="security-checklist mb-4">
+            <h3 class="mb-4">Security Checklist</h3>
+            <p>Use this checklist to verify your deployment is properly secured:</p>
+            
+            <div class="checklist-item d-flex align-items-start">
+              <span class="checklist-icon"><i class="fas fa-check-circle"></i></span>
+              <div>
+                <h5>Strong API Key</h5>
+                <p>Set a secure API_KEY in your .env file (at least 16 random characters)</p>
+              </div>
+            </div>
+            
+            <div class="checklist-item d-flex align-items-start">
+              <span class="checklist-icon"><i class="fas fa-check-circle"></i></span>
+              <div>
+                <h5>Strong Admin Password</h5>
+                <p>Set a secure ADMIN_PASSWORD in your .env file (different from your API key)</p>
+              </div>
+            </div>
+            
+            <div class="checklist-item d-flex align-items-start">
+              <span class="checklist-icon"><i class="fas fa-check-circle"></i></span>
+              <div>
+                <h5>Private Environment Variables</h5>
+                <p>Ensure your .env file is NOT included in version control</p>
+              </div>
+            </div>
+            
+            <div class="checklist-item d-flex align-items-start">
+              <span class="checklist-icon"><i class="fas fa-check-circle"></i></span>
+              <div>
+                <h5>HTTPS Enabled</h5>
+                <p>Verify your production deployment uses HTTPS (automatic with Render)</p>
+              </div>
+            </div>
+            
+            <div class="checklist-item d-flex align-items-start">
+              <span class="checklist-icon"><i class="fas fa-check-circle"></i></span>
+              <div>
+                <h5>CORS Settings for Production</h5>
+                <p>Configure ALLOWED_ORIGINS in production if needed</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4 class="mb-0"><i class="fas fa-key me-2"></i>Creating Strong API Keys & Passwords</h4>
+            </div>
+            <div class="card-body">
+              <p>Your application requires two different security credentials:</p>
+              <ul>
+                <li><strong>API_KEY</strong> - Used to authenticate API requests</li>
+                <li><strong>ADMIN_PASSWORD</strong> - Used to protect admin pages</li>
+              </ul>
+              
+              <p>These should be:</p>
+              <ul>
+                <li>At least 16 characters long</li>
+                <li>Include a mix of letters, numbers, and symbols</li>
+                <li>Not based on dictionary words</li>
+                <li>Different from each other and any other passwords you use</li>
+              </ul>
+              
+              <div class="code-generator">
+                <h5>Generate a Secure API Key</h5>
+                <p>You can use this button to generate a secure random API key:</p>
+                
+                <div class="input-group mb-3">
+                  <input type="text" id="generatedKey" class="form-control" placeholder="Generated key will appear here" readonly>
+                  <button class="btn btn-primary" type="button" id="generateBtn" onclick="generateSecureKey()">Generate Key</button>
+                  <button class="btn btn-outline-secondary" type="button" id="copyBtn" onclick="copyToClipboard()">
+                    <i class="fas fa-copy"></i>
+                  </button>
+                </div>
+                
+                <div class="success-alert" id="copiedAlert" style="display: none;">
+                  <i class="fas fa-check-circle"></i> Copied to clipboard!
+                </div>
+                
+                <script>
+                  function generateSecureKey() {
+                    const length = 32;
+                    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+                    let result = "";
+                    
+                    for (let i = 0; i < length; i++) {
+                      const randomIndex = Math.floor(Math.random() * charset.length);
+                      result += charset.charAt(randomIndex);
+                    }
+                    
+                    document.getElementById("generatedKey").value = result;
+                  }
+                  
+                  function copyToClipboard() {
+                    const copyText = document.getElementById("generatedKey");
+                    copyText.select();
+                    copyText.setSelectionRange(0, 99999);
+                    navigator.clipboard.writeText(copyText.value);
+                    
+                    const alert = document.getElementById("copiedAlert");
+                    alert.style.display = "block";
+                    setTimeout(() => {
+                      alert.style.display = "none";
+                    }, 2000);
+                  }
+                </script>
+              </div>
+              
+              <div class="security-alert mt-4">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Never share your API key or admin password!</strong> These credentials provide full access to your application. If you need to share access with someone, consider creating a new deployment for them instead.
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4 class="mb-0"><i class="fas fa-file-alt me-2"></i>Protecting Your .env File</h4>
+            </div>
+            <div class="card-body">
+              <p>The <code>.env</code> file contains all your sensitive API keys and credentials. It's crucial to keep this file secure:</p>
+              
+              <h5>Best Practices:</h5>
+              <ul>
+                <li>Never commit your <code>.env</code> file to Git repositories</li>
+                <li>Always use <code>.env.example</code> in repositories instead</li>
+                <li>If you accidentally commit your <code>.env</code> file, rotate all API keys immediately</li>
+                <li>Set up <code>.gitignore</code> to exclude the <code>.env</code> file</li>
+              </ul>
+              
+              <h5>Setting up .gitignore</h5>
+              <p>Make sure your <code>.gitignore</code> file contains this line:</p>
+              <pre><code># Ignore environment variables file
+.env
+.env.local</code></pre>
+              
+              <div class="security-alert">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> If you fork this repository, verify that <code>.env</code> is already in the <code>.gitignore</code> file before adding your credentials.
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4 class="mb-0"><i class="fas fa-globe me-2"></i>Understanding CORS Settings</h4>
+            </div>
+            <div class="card-body">
+              <p>CORS (Cross-Origin Resource Sharing) controls which websites can access your API. The application includes the following CORS configuration:</p>
+              
+              <pre><code>// Configure CORS with more restrictive settings
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.APP_URL || 'http://localhost:3000'].concat(
+        (process.env.ALLOWED_ORIGINS || '').split(',').filter(origin => origin.trim())
+      )
+    : '*', // Allow all origins in development
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+  credentials: true,
+  maxAge: 86400 // 24 hours
+};</code></pre>
+              
+              <h5>What This Means:</h5>
+              <ul>
+                <li>In development: All websites can access your API (more permissive for easier testing)</li>
+                <li>In production: Only specified websites can access your API (more secure)</li>
+              </ul>
+              
+              <h5>Setting ALLOWED_ORIGINS:</h5>
+              <p>If you need to access your API from other websites, add this to your .env file:</p>
+              <pre><code>ALLOWED_ORIGINS=https://your-website.com,https://another-site.com</code></pre>
+              
+              <div class="security-alert">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> For most self-hosted deployments, you won't need to change the CORS settings. Only modify these if you're building a separate frontend that needs to access your API.
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Deployment Security</h4>
+            </div>
+            <div class="card-body">
+              <p>When deploying your application, these additional security considerations are important:</p>
+              
+              <h5>Render Deployment (Recommended)</h5>
+              <ul>
+                <li>Render automatically enables HTTPS</li>
+                <li>Set all environment variables through the Render dashboard</li>
+                <li>Mark environment variables as "Secret" in Render</li>
+                <li>Enable "Auto-Deploy" only if your repository is private</li>
+              </ul>
+              
+              <h5>Other Hosting Providers</h5>
+              <ul>
+                <li>Always enable HTTPS</li>
+                <li>Use environment variables instead of hardcoding credentials</li>
+                <li>Consider using a firewall if you want to restrict access by IP</li>
+                <li>Keep your deployment up to date with security patches</li>
+              </ul>
+              
+              <div class="security-alert">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> Never deploy directly from a public repository that contains sensitive information. Always use environment variables or secrets management.
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4 class="mb-0"><i class="fas fa-bug me-2"></i>Error Handling & Troubleshooting</h4>
+            </div>
+            <div class="card-body">
+              <p>The application includes secure error handling to prevent leaking sensitive information:</p>
+              
+              <pre><code>// Global error handler with improved error response
+app.use((err, req, res, next) => {
+  // Log the full error for server-side debugging
+  console.error('Unhandled error:', err);
+  
+  // Send sanitized error in production
+  res.status(500).json({
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'production' 
+      ? 'An unexpected error occurred' 
+      : err.message,
+    requestId: req.id // You can add request ID tracking if needed
+  });
+});</code></pre>
+              
+              <h5>What This Means:</h5>
+              <ul>
+                <li>In development: You'll see detailed error messages to help with debugging</li>
+                <li>In production: Only generic error messages are shown to users, preventing information leakage</li>
+              </ul>
+              
+              <h5>Troubleshooting Security Issues:</h5>
+              <ul>
+                <li>If authentication fails, check your API_KEY and ADMIN_PASSWORD in .env</li>
+                <li>If you get CORS errors, check your ALLOWED_ORIGINS setting</li>
+                <li>Use the "development" mode locally to see detailed error messages</li>
+                <li>Check server logs for detailed error information</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="cta-section">
+            <h2 class="mb-4">Security FAQ</h2>
+            
+            <div class="accordion" id="securityFAQ">
+              <div class="accordion-item border-0 mb-3 shadow-sm">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Do I need enterprise-level security for this application?
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#securityFAQ">
+                  <div class="accordion-body">
+                    <p>No. This application is designed as a self-hosted educational tool, not an enterprise system. The security measures in place are appropriate for this use case, protecting your API keys and data without unnecessary complexity.</p>
+                    <p>The most important security steps are:</p>
+                    <ul>
+                      <li>Using strong, unique API keys and passwords</li>
+                      <li>Keeping your .env file private</li>
+                      <li>Enabling HTTPS in production</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item border-0 mb-3 shadow-sm">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    What happens if someone gets access to my API keys?
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#securityFAQ">
+                  <div class="accordion-body">
+                    <p>If your API keys are compromised, someone could:</p>
+                    <ul>
+                      <li>Access your Calendly schedule and availability</li>
+                      <li>Create or modify agents on your Elevenlabs account</li>
+                      <li>Send SMS messages via your Twilio account (if configured)</li>
+                      <li>Modify your system prompt via GitHub (if configured)</li>
+                    </ul>
+                    <p>If you suspect your keys have been compromised, immediately:</p>
+                    <ol>
+                      <li>Revoke and regenerate all API keys from their respective platforms</li>
+                      <li>Update your .env file with the new keys</li>
+                      <li>Check for any unauthorized changes or activity</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item border-0 mb-3 shadow-sm">
+                <h2 class="accordion-header" id="headingThree">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Is my caller's data secure with this integration?
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#securityFAQ">
+                  <div class="accordion-body">
+                    <p>This integration handles limited caller data:</p>
+                    <ul>
+                      <li>Phone numbers for time zone detection and SMS delivery</li>
+                      <li>Names for personalized scheduling</li>
+                      <li>Calendar availability data</li>
+                    </ul>
+                    <p>This data is secured through:</p>
+                    <ul>
+                      <li>HTTPS encryption for all data in transit</li>
+                      <li>Secure logging that masks phone numbers</li>
+                      <li>No persistent storage of caller data beyond what Calendly and Elevenlabs already store</li>
+                    </ul>
+                    <p>Note that Elevenlabs and Calendly have their own data handling policies that apply when using their services.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item border-0 shadow-sm">
+                <h2 class="accordion-header" id="headingFour">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Should I implement additional security measures?
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#securityFAQ">
+                  <div class="accordion-body">
+                    <p>For most educational and personal uses, the current security measures are sufficient. However, if you plan to use this in a more professional or high-traffic setting, consider:</p>
+                    <ul>
+                      <li>Setting up an API key rotation schedule (change keys regularly)</li>
+                      <li>Implementing IP-based restrictions if your hosting provider supports it</li>
+                      <li>Adding monitoring and alerts for suspicious activity</li>
+                      <li>Conducting regular security audits of your deployment</li>
+                    </ul>
+                    <p>Remember that security should be proportional to your specific use case and the sensitivity of your data.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-4">
+              <a href="technical.html" class="btn btn-primary">
+                <i class="fas fa-book me-2"></i>View Technical Reference
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

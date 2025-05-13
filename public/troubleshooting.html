@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Troubleshooting | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+    
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+    
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+    
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    
+    code {
+      color: var(--primary-color);
+    }
+    
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+    
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+    
+    .content-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .section-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .section-header i {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      color: var(--primary-color);
+    }
+    
+    .issue-card {
+      border-left: 4px solid var(--primary-color);
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 2rem;
+    }
+    
+    .issue-card h5 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .solution {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+    
+    .solution h6 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .solution ol, .solution ul {
+      padding-left: 1.5rem;
+    }
+    
+    .error-code {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background-color: #f8d7da;
+      color: #842029;
+      border-radius: 5px;
+      font-family: monospace;
+      margin-bottom: 0.5rem;
+    }
+    
+    .debug-info {
+      background-color: #f8f9fa;
+      border: 1px dashed #dee2e6;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+    }
+    
+    .support-card {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    
+    .support-card i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+    
+    .support-card h5 {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Troubleshooting</h1>
+      <p class="lead mb-4">Solutions for common issues and challenges</p>
+      <a href="help.html" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Documentation</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>On This Page</h3>
+            <ul>
+              <li>
+                <a href="#server-issues"><i class="fas fa-server"></i> Server Issues</a>
+              </li>
+              <li>
+                <a href="#calendly-issues"><i class="fas fa-calendar"></i> Calendly Integration</a>
+              </li>
+              <li>
+                <a href="#elevenlabs-issues"><i class="fas fa-microphone"></i> Elevenlabs Issues</a>
+              </li>
+              <li>
+                <a href="#twilio-issues"><i class="fas fa-sms"></i> Twilio & SMS Issues</a>
+              </li>
+              <li>
+                <a href="#prompt-issues"><i class="fas fa-edit"></i> System Prompt Issues</a>
+              </li>
+              <li>
+                <a href="#logs"><i class="fas fa-list"></i> Reading Server Logs</a>
+              </li>
+              <li>
+                <a href="#getting-help"><i class="fas fa-question-circle"></i> Getting Help</a>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul>
+              <li>
+                <a href="help.html"><i class="fas fa-home"></i> Documentation Home</a>
+              </li>
+              <li>
+                <a href="setup.html"><i class="fas fa-rocket"></i> Setup Guide</a>
+              </li>
+              <li>
+                <a href="integrations.html"><i class="fas fa-plug"></i> Integration Setup</a>
+              </li>
+              <li>
+                <a href="agent-builder-guide.html"><i class="fas fa-robot"></i> Agent Builder Guide</a>
+              </li>
+              <li>
+                <a href="prompt-guide.html"><i class="fas fa-edit"></i> System Prompt Guide</a>
+              </li>
+              <li>
+                <a href="technical.html"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="troubleshooting.html" class="active"><i class="fas fa-life-ring"></i> Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2 class="mb-4">Common Issues & Solutions</h2>
+            
+            <p>This guide covers the most common issues you might encounter when setting up and using the Calendly-Elevenlabs Integration, along with step-by-step solutions.</p>
+            
+            <div class="debug-info">
+              <h5><i class="fas fa-tools me-2"></i>Debugging Tools</h5>
+              <p>When troubleshooting, these resources can help identify issues:</p>
+              <ul>
+                <li><strong>Server Logs:</strong> Available in your Render dashboard under the "Logs" tab</li>
+                <li><strong>Network Inspector:</strong> Use your browser's developer tools to check API responses</li>
+                <li><strong>Health Endpoint:</strong> Check <code>/health</code> to verify server status</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div id="server-issues" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-server"></i> Server Issues</h3>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Server Shows as Offline</h5>
+            <p>If your server shows as offline or you can't access the web interface, there might be an issue with your deployment.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Check your Render dashboard to see if the service is running</li>
+                <li>Verify that the service has finished deploying (look for "Deploy successful" message)</li>
+                <li>Check for error messages in the logs</li>
+                <li>If needed, try redeploying the service using the "Manual Deploy" button</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Missing Environment Variables</h5>
+            <p>If your server starts but functionality is limited, you might be missing required environment variables.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Go to your Render dashboard</li>
+                <li>Select your service and go to the "Environment" tab</li>
+                <li>Ensure all required variables are set:
+                  <ul>
+                    <li><code>API_KEY</code></li>
+                    <li><code>CALENDLY_API_TOKEN</code></li>
+                    <li>Other variables based on your configuration</li>
+                  </ul>
+                </li>
+                <li>After adding missing variables, restart your service</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>API Key Authentication Errors</h5>
+            <p>If you're receiving 401 Unauthorized errors when making API calls, there might be an issue with your API key.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that you've set the <code>API_KEY</code> environment variable in Render</li>
+                <li>Ensure that you're passing the same API key in the <code>X-API-Key</code> header when making requests</li>
+                <li>Check for any spaces or special characters in your API key that might cause issues</li>
+                <li>If needed, generate a new API key (a simple alphanumeric string) and update both the environment variable and your requests</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div id="calendly-issues" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-calendar"></i> Calendly Integration Issues</h3>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Cannot Discover Calendly Events</h5>
+            <p>If the agent builder cannot discover your Calendly events, there might be an issue with your Calendly API token.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that your Calendly API token is correct and not expired</li>
+                <li>Generate a new token in your Calendly account if needed</li>
+                <li>Make sure you have at least one active event type in your Calendly account</li>
+                <li>Check server logs for specific Calendly API errors</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Incorrect Availability Information</h5>
+            <p>If your agent reports incorrect availability or cannot find open slots that you know exist.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Check your Calendly calendar to make sure the time slots are actually available</li>
+                <li>Verify that your Calendly account's timezone settings are correct</li>
+                <li>Set the <code>DEFAULT_TIMEZONE</code> environment variable to your preferred timezone</li>
+                <li>Consider any scheduling rules or buffers you have set in Calendly that might affect availability</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="error-code">Error: Failed to retrieve Calendly user information</div>
+          <p>This error occurs when the server cannot retrieve your Calendly user information using your API token.</p>
+          
+          <div class="solution">
+            <h6>Solution:</h6>
+            <ol>
+              <li>Verify that your Calendly API token is correct</li>
+              <li>Make sure your Calendly account is active and in good standing</li>
+              <li>Check if there are any Calendly service outages</li>
+              <li>If needed, set the <code>CALENDLY_USER_UUID</code> environment variable manually</li>
+            </ol>
+          </div>
+        </div>
+        
+        <div id="elevenlabs-issues" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-microphone"></i> Elevenlabs Issues</h3>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Agent Creation Fails</h5>
+            <p>If you encounter errors when trying to create an agent through the Agent Builder.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that your Elevenlabs API key is correct and has not expired</li>
+                <li>Ensure you have a subscription plan that supports voice agents (Starter or higher)</li>
+                <li>Check that you've selected at least one event type in the Agent Builder</li>
+                <li>Verify that your server URL is correctly formatted (https://your-app-name.onrender.com)</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Agent Cannot Access Calendly Data</h5>
+            <p>If your agent is created successfully but cannot access Calendly data during calls.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that your server is online and accessible</li>
+                <li>Ensure the server URL provided during agent creation is correct</li>
+                <li>Check that the server API key matches the API_KEY environment variable</li>
+                <li>Look for webhook errors in the server logs</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Function Handler Errors</h5>
+            <p>If your agent reports errors when trying to check availability or book appointments.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Check the server logs for specific error messages</li>
+                <li>Verify that your Calendly API token is still valid</li>
+                <li>Ensure the event type URLs in your agent configuration are correct</li>
+                <li>Test the function handler directly using a tool like Postman</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div id="twilio-issues" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-sms"></i> Twilio & SMS Issues</h3>
+          </div>
+          
+          <div class="issue-card">
+            <h5>SMS Messages Not Being Sent</h5>
+            <p>If booking confirmation SMS messages are not being sent or received.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that you've set <code>ENABLE_SMS=true</code> in your environment variables</li>
+                <li>Check that your Twilio credentials are correct:
+                  <ul>
+                    <li><code>TWILIO_ACCOUNT_SID</code></li>
+                    <li><code>TWILIO_AUTH_TOKEN</code></li>
+                    <li><code>TWILIO_PHONE_NUMBER</code></li>
+                  </ul>
+                </li>
+                <li>Ensure your Twilio account has sufficient credit for sending SMS</li>
+                <li>Check if the phone number being used is in the correct format (e.g., +1234567890)</li>
+                <li>Look for Twilio-specific errors in the server logs</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Twilio Phone Number Not Working</h5>
+            <p>If you've set up a Twilio phone number in Elevenlabs but calls are not connecting to your agent.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that the phone number is correctly configured in Elevenlabs</li>
+                <li>Ensure your Twilio account is active and in good standing</li>
+                <li>Check if the phone number has the necessary capabilities (voice)</li>
+                <li>Review the Twilio logs for any connection errors</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="error-code">Error: The 'To' number is not a valid phone number</div>
+          <p>This Twilio error occurs when the phone number format is incorrect.</p>
+          
+          <div class="solution">
+            <h6>Solution:</h6>
+            <ol>
+              <li>Ensure the phone number includes the country code (e.g., +1 for US)</li>
+              <li>Format should be: +[country code][area code][phone number]</li>
+              <li>Remove any spaces, dashes, or parentheses from the phone number</li>
+              <li>Verify that you're using a valid mobile number that can receive SMS</li>
+            </ol>
+          </div>
+        </div>
+        
+        <div id="prompt-issues" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-edit"></i> System Prompt Issues</h3>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Prompt Builder GitHub Errors</h5>
+            <p>If you encounter errors when trying to save your system prompt using the Prompt Builder.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Verify that your GitHub personal access token has the "repo" scope</li>
+                <li>Ensure your repository name and owner are correct</li>
+                <li>Check if you're using the correct branch name (usually "main" or "master")</li>
+                <li>Make sure your token has not expired</li>
+                <li>Try creating a new token if needed</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>System Prompt Not Updated After Changes</h5>
+            <p>If your agent's behavior doesn't reflect changes made to the system prompt.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Wait a few minutes for your server to redeploy with the new prompt</li>
+                <li>Check your Render logs to confirm that the redeployment was successful</li>
+                <li>Verify that the changes were successfully committed to your GitHub repository</li>
+                <li>Test your agent again after redeployment is complete</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="issue-card">
+            <h5>Agent Ignoring Specific Instructions</h5>
+            <p>If your agent is not following certain instructions in your system prompt.</p>
+            
+            <div class="solution">
+              <h6>Solution:</h6>
+              <ol>
+                <li>Check that you didn't accidentally modify critical sections of the prompt (like Tool Usage Instructions)</li>
+                <li>Make sure your instructions are clear and specific</li>
+                <li>Consider using section headers (#) and bullet points for better clarity</li>
+                <li>Test with simpler instructions first to isolate the issue</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div id="logs" class="content-section">
+          <div class="section-header">
+            <h3><i class="fas fa-list"></i> Reading Server Logs</h3>
+          </div>
+          
+          <p>Server logs are your best tool for diagnosing issues. Here's how to access and interpret them:</p>
+          
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5>Accessing Logs in Render</h5>
+              <ol>
+                <li>Go to your Render dashboard</li>
+                <li>Select your Calendly-Elevenlabs Integration service</li>
+                <li>Click on the "Logs" tab</li>
+                <li>Use the search box to filter logs for specific terms (e.g., "error", "Calendly", "Twilio")</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5>Common Log Patterns</h5>
+              
+              <p><strong>Webhook Calls:</strong></p>
+              <pre><code>Twilio personalization webhook called: { caller_id: '+1234567890', ... }
+Using time zone: America/New_York for caller +1234567890</code></pre>
+              
+              <p><strong>Function Calls:</strong></p>
+              <pre><code>Function handler called: { function_name: 'checkAvailability', ... }
+Error checking availability: Error: Invalid API token</code></pre>
+              
+              <p><strong>SMS Debug Info:</strong></p>
+              <pre><code>-----SMS DEBUGGING-----
+REQUEST BODY: { phoneNumber: '+1234567890', ... }
+ATTEMPTING TO SEND SMS TO: +1234567890</code></pre>
+            </div>
+          </div>
+        </div>
+        
+        <div id="getting-help" class="card mt-4">
+          <div class="card-body">
+            <h3 class="mb-4">Getting Additional Help</h3>
+            
+            <div class="support-card">
+              <i class="fab fa-github"></i>
+              <h5>GitHub Issues</h5>
+              <p>For bugs or technical issues, you can create an issue in the GitHub repository:</p>
+              <a href="https://github.com/jammm1n/calendly-elevenlabs-server-tiktok" target="_blank" class="btn btn-outline-dark">Create an Issue</a>
+            </div>
+            
+            <div class="support-card">
+              <i class="fab fa-tiktok"></i>
+              <h5>TikTok Community</h5>
+              <p>Join the community discussion on TikTok by commenting on the tutorial videos:</p>
+              <a href="https://www.tiktok.com/@ai_entrepreneur_educator" target="_blank" class="btn btn-outline-dark">TikTok Channel</a>
+            </div>
+            
+            <div class="support-card">
+              <i class="fas fa-envelope"></i>
+              <h5>Email Support</h5>
+              <p>For more complex issues or private inquiries, you can reach out via email:</p>
+              <a href="mailto:support@bramforth.ai" class="btn btn-outline-dark">support@bramforth.ai</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

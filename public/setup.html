@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Guide | Calendly-Elevenlabs Integration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #2575fc;
+      --text-color: #212529;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --section-padding: 5rem 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 80px;
+      /* Space for footer */
+    }
+
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+
+    .nav-pills .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+    }
+
+    .documentation-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .documentation-card .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .documentation-card .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .documentation-card .btn {
+      margin-top: auto;
+    }
+
+    .cta-section {
+      background-color: white;
+      border-radius: 15px;
+      padding: 3rem;
+      margin: 3rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+
+    .quick-links {
+      background: rgba(106, 17, 203, 0.05);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-links h3 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .quick-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .quick-links ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .quick-links ul li a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .quick-links ul li a:hover {
+      background-color: rgba(106, 17, 203, 0.1);
+    }
+
+    .quick-links ul li a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+
+    /* Code examples styling */
+    pre {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    code {
+      color: var(--primary-color);
+    }
+
+    /* Table of contents */
+    .toc {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    @media (max-width: 991px) {
+      .toc {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    /* Step by step guide styling */
+    .step-container {
+      border-left: 3px dashed var(--primary-color);
+      padding-left: 2rem;
+      position: relative;
+      margin-left: 1rem;
+    }
+
+    .step {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step::before {
+      content: "";
+      position: absolute;
+      left: -2.5rem;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .step-number {
+      position: absolute;
+      left: -2.5rem;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      z-index: 1;
+    }
+
+    .step-content {
+      background-color: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .step-title {
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
+
+    .env-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+    }
+
+    .env-table th,
+    .env-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .env-table th {
+      background-color: rgba(106, 17, 203, 0.1);
+      font-weight: 600;
+    }
+
+    .env-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .alert-info {
+      background-color: rgba(37, 117, 252, 0.1);
+      border-left: 4px solid var(--secondary-color);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .alert-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+    }
+
+    .img-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .img-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .img-caption {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #6c757d;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <div class="hero text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Setup Guide</h1>
+      <p class="lead mb-4">Get your Calendly-Elevenlabs Integration up and running</p>
+      <a href="help.html" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Documentation</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3">
+        <div class="toc">
+          <div class="quick-links">
+            <h3>On This Page</h3>
+            <ul>
+              <li>
+                <a href="#prerequisites"><i class="fas fa-check-circle"></i> Prerequisites</a>
+              </li>
+              <li>
+                <a href="#step1"><i class="fas fa-github"></i> Step 1: Fork Repository</a>
+              </li>
+              <li>
+                <a href="#step2"><i class="fas fa-server"></i> Step 2: Deploy to Render</a>
+              </li>
+              <li>
+                <a href="#step3"><i class="fas fa-key"></i> Step 3: Configure Environment</a>
+              </li>
+              <li>
+                <a href="#step4"><i class="fas fa-vial"></i> Step 4: Test Deployment</a>
+              </li>
+              <li>
+                <a href="#next-steps"><i class="fas fa-arrow-right"></i> Next Steps</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="quick-links">
+            <h3>Documentation</h3>
+            <ul>
+              <li>
+                <a href="help.html"><i class="fas fa-home"></i> Documentation Home</a>
+              </li>
+              <li>
+                <a href="setup.html" class="active"><i class="fas fa-rocket"></i> Setup Guide</a>
+              </li>
+              <li>
+                <a href="integrations.html"><i class="fas fa-plug"></i> Integration Setup</a>
+              </li>
+              <li>
+                <a href="agent-builder-guide.html"><i class="fas fa-robot"></i> Agent Builder Guide</a>
+              </li>
+              <li>
+                <a href="prompt-guide.html"><i class="fas fa-edit"></i> System Prompt Guide</a>
+              </li>
+              <li>
+                <a href="technical.html"><i class="fas fa-code"></i> Technical Reference</a>
+              </li>
+              <li>
+                <a href="troubleshooting.html"><i class="fas fa-life-ring"></i> Troubleshooting</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="col-lg-9">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2 class="mb-4">Getting Started</h2>
+
+            <p>This guide will walk you through the complete setup process for your own Calendly-Elevenlabs Integration
+              server. By following these steps, you'll have a working system that can handle appointment scheduling
+              through AI voice calls.</p>
+
+            <div class="alert-info">
+              <strong><i class="fas fa-info-circle me-2"></i>Important Security Update:</strong> This application is
+              designed as a single-user deployment where you host your own instance. All API keys and credentials are
+              now stored securely in environment variables for enhanced security.
+            </div>
+          </div>
+        </div>
+
+        <div id="prerequisites" class="card mb-4">
+          <div class="card-body">
+            <h3 class="mb-3">Prerequisites</h3>
+
+            <p>Before you begin, you'll need to have accounts with the following services:</p>
+
+            <div class="row g-4 mb-3">
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="40"
+                    class="me-3" />
+                  <div>
+                    <h5 class="mb-0">GitHub Account</h5>
+                    <a href="https://github.com/signup" target="_blank">Sign up here</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <img src="https://cdn.freebiesupply.com/logos/large/2x/render-logo-png-transparent.png" width="40"
+                    class="me-3" />
+                  <div>
+                    <h5 class="mb-0">Render Account</h5>
+                    <a href="https://render.com/register" target="_blank">Sign up here</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <img src="images/logo-calendly.png" width="40" class="me-3" />
+                  <div>
+                    <h5 class="mb-0">Calendly Account</h5>
+                    <a href="https://calendly.com/signup" target="_blank">Sign up here</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <img src="images/logo-elevenlabs.png" width="40" class="me-3" />
+                  <div>
+                    <h5 class="mb-0">Elevenlabs Account</h5>
+                    <a href="https://elevenlabs.io/signup" target="_blank">Sign up here</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <img src="https://www.twilio.com/assets/icons/twilio-icon-64-10ca3628ea.png" width="40"
+                    class="me-3" />
+                  <div>
+                    <h5 class="mb-0">Twilio Account (Optional)</h5>
+                    <a href="https://www.twilio.com/try-twilio" target="_blank">Sign up here</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert-warning mt-4">
+              <strong>Note:</strong> You'll need to gather API keys from these services and add them to your environment
+              variables. We'll cover this in Step 3.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-container">
+          <div id="step1" class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3 class="step-title">Fork the GitHub Repository</h3>
+
+              <p>First, you'll need to create your own copy of the Calendly-Elevenlabs Integration repository:</p>
+
+              <ol>
+                <li>Navigate to the <a href="https://github.com/YOUR_USERNAME/calendly-elevenlabs-server"
+                    target="_blank">GitHub repository</a></li>
+                <li>Click the "Fork" button in the top-right corner</li>
+                <li>Select your GitHub account as the destination for the fork</li>
+                <li>Wait for GitHub to create a copy of the repository under your account</li>
+              </ol>
+
+              <div class="img-container">
+                <img src="images/fork-repo.png" alt="Forking a repository on GitHub" />
+                <p class="img-caption">Forking creates your own copy of the repository that you can deploy</p>
+              </div>
+
+              <div class="alert-info">
+                <strong>Why Fork?</strong> Forking the repository allows you to have your own copy that you can
+                customize and deploy. This is particularly important for the prompt builder feature, which needs access
+                to your GitHub repository.
+              </div>
+            </div>
+          </div>
+
+          <div id="step2" class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3 class="step-title">Deploy to Render</h3>
+
+              <p>Render makes it easy to deploy your server with a single click:</p>
+
+              <ol>
+                <li>Navigate to your forked repository on GitHub</li>
+                <li>Click the "Deploy to Render" button in the README.md file</li>
+                <li>If you're not already logged in to Render, you'll be prompted to log in</li>
+                <li>On the Render deployment page, configure the following settings:
+                  <ul>
+                    <li><strong>Name</strong>: Choose a name for your service (e.g., "calendly-elevenlabs-server")</li>
+                    <li><strong>Region</strong>: Choose a region close to your location</li>
+                    <li><strong>Branch</strong>: main (or master, depending on your repository)</li>
+                    <li><strong>Root Directory</strong>: Leave blank</li>
+                    <li><strong>Environment</strong>: Node</li>
+                    <li><strong>Build Command</strong>: npm install</li>
+                    <li><strong>Start Command</strong>: node server.js</li>
+                  </ul>
+                </li>
+                <li>Click "Create Web Service"</li>
+                <li>Wait for Render to build and deploy your application (this may take a few minutes)</li>
+              </ol>
+
+              <div class="img-container">
+                <img src="images/Render-Deployment.png" alt="Deploying to Render" />
+                <p class="img-caption">The Render deployment interface with recommended settings</p>
+              </div>
+
+              <div class="alert-info">
+                <strong>Tip:</strong> You can also deploy manually by connecting your GitHub account to Render and
+                selecting your forked repository.
+              </div>
+            </div>
+          </div>
+
+          <div id="step3" class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3 class="step-title">Configure Environment Variables</h3>
+
+              <p>After deployment, you need to configure your environment variables for security and functionality:</p>
+
+              <ol>
+                <li>In the Render dashboard, select your newly created service</li>
+                <li>Go to the "Environment" tab</li>
+                <li>Add the following environment variables:</li>
+              </ol>
+
+              <div class="table-responsive">
+                <table class="env-table">
+                  <thead>
+                    <tr>
+                      <th>Variable Name</th>
+                      <th>Description</th>
+                      <th>Required?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>API_KEY</code></td>
+                      <td>A secret key for your server API (create your own secure string)</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>ADMIN_PASSWORD</code></td>
+                      <td>Password for accessing admin pages (agent-builder, prompt-builder)</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>CALENDLY_API_TOKEN</code></td>
+                      <td>Your Calendly API key</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>ELEVENLABS_API_KEY</code></td>
+                      <td>Your Elevenlabs API key</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>GITHUB_TOKEN</code></td>
+                      <td>Personal access token for your GitHub account (with repo scope)</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>GITHUB_REPO_OWNER</code></td>
+                      <td>Your GitHub username</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>GITHUB_REPO_NAME</code></td>
+                      <td>Name of your forked repository</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>DEFAULT_TIMEZONE</code></td>
+                      <td>Default timezone (e.g., 'America/New_York')</td>
+                      <td>No</td>
+                    </tr>
+                    <tr>
+                      <td><code>ENABLE_SMS</code></td>
+                      <td>Set to "true" to enable SMS confirmations</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>TWILIO_ACCOUNT_SID</code></td>
+                      <td>Your Twilio account SID</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>TWILIO_AUTH_TOKEN</code></td>
+                      <td>Your Twilio authentication token</td>
+                      <td>Yes</td>
+                    </tr>
+                    <tr>
+                      <td><code>TWILIO_PHONE_NUMBER</code></td>
+                      <td>Your Twilio phone number</td>
+                      <td>Yes</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="alert-warning">
+                <strong>Important:</strong> After adding environment variables, click the "Save Changes" button and then
+                restart your service using the "Manual Deploy" button and selecting "Clear build cache & deploy".
+              </div>
+
+              <div class="alert-info">
+                <strong>Enhanced Security:</strong> API keys are now stored securely in environment variables instead of
+                being entered in the user interface. This provides better security for your credentials.
+              </div>
+
+              <div class="alert-info">
+                <strong>Need help with API keys?</strong> Check the <a href="integrations.html">Integration Setup
+                  Guide</a> for detailed instructions on obtaining API keys from each service.
+              </div>
+            </div>
+          </div>
+
+          <div id="step4" class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3 class="step-title">Test Your Deployment</h3>
+
+              <p>Now it's time to make sure everything is working:</p>
+
+              <ol>
+                <li>Go to your deployed application URL (e.g., <code>https://your-app-name.onrender.com</code>)</li>
+                <li>You should see the home page with server status</li>
+                <li>If the status shows "Server Online," your deployment is successful!</li>
+                <li>Click on "Agent Builder" to start creating your voice agent</li>
+                <li>You'll be prompted for authentication - enter any username (e.g., "admin") and the password you set
+                  in the <code>ADMIN_PASSWORD</code> environment variable</li>
+              </ol>
+
+              <div class="img-container">
+                <img src="images/server-home-page.png" alt="Home page with server status" />
+                <p class="img-caption">The home page should show "Server Online" if deployment is successful</p>
+              </div>
+
+              <div class="alert-info">
+                <strong>Authentication:</strong> Admin pages (agent-builder.html, prompt-builder.html) are now protected
+                with Basic Authentication. Use any username with the password you set in the <code>ADMIN_PASSWORD</code>
+                environment variable.
+              </div>
+
+              <div class="alert-warning">
+                <strong>Troubleshooting:</strong> If your server is not running or shows errors, check the logs in the
+                Render dashboard. Common issues include missing environment variables or incorrect API keys.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="next-steps" class="card mt-4">
+          <div class="card-body">
+            <h3 class="mb-3">Next Steps</h3>
+
+            <p>Congratulations! Your Calendly-Elevenlabs Integration server is now set up and running. Here's what to do
+              next:</p>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-plug me-2 text-primary"></i>Configure Integrations</h5>
+                    <p>Learn more about the API keys and integration settings you've configured.</p>
+                    <a href="integrations.html" class="btn btn-outline-primary mt-2">Integration Guide</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5><i class="fas fa-robot me-2 text-primary"></i>Create Your First Agent</h5>
+                    <p>Use the Agent Builder to connect your Calendly events to a voice agent.</p>
+                    <a href="agent-builder-guide.html" class="btn btn-outline-primary mt-2">Agent Builder Guide</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p>Designed for the TikTok tutorial series by <a href="https://bramforth.ai" class="text-white">Bramforth.ai</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
