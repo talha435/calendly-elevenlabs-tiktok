@@ -1,2 +1,4 @@
 /node_modules
 .env
+src/config/prompts/systemPrompt_backup.js
+systemPrompt_backup.js
