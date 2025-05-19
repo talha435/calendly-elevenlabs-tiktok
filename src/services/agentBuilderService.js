@@ -63,7 +63,7 @@ async function createAgentConfig(options) {
       },
       tts: {
         model_id: "eleven_flash_v2",
-        voice_id: "8N2ng9i2uiUWqstgmWlH", 
+        voice_id: "cgSgspJ2msm6clMCkdW9", 
         agent_output_audio_format: "pcm_16000",
         optimize_streaming_latency: 3,
         stability: 0.5,
