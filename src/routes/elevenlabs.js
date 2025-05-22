@@ -8,6 +8,37 @@ const agentBuilderService = require('../services/agentBuilderService');
 const timeUtils = require('../utils/time-utils');
 const { authenticateApiKey } = require('../middleware/auth');
 
+// Generic phone number redaction function for console output
+const redactPhoneForConsole = (text) => {
+  if (typeof text !== 'string') return text;
+  
+  return text
+    // UK international format: +447xxxxxxxxx -> +44XXXXXxxxx (show first 3, last 4)
+    .replace(/\+44(7\d)(\d{5})(\d{4})/g, '+44$1XXXXX$3')
+    // UK domestic format: 07xxxxxxxxx -> 07XXXXXxxxx (show first 2, last 4) 
+    .replace(/\b(07)(\d{5})(\d{4})\b/g, '$1XXXXX$3')
+    // US format: +1xxxxxxxxxx -> +1XXXXXXxxxx (show first 2, last 4)
+    .replace(/\+1(\d{3})(\d{4})(\d{4})/g, '+1$1XXXX$3')
+    // Other international: +xxxxxxxxxxxx -> +xxXXXXXXxxxx (show country code + 2, last 4)
+    .replace(/\+(\d{1,3})(\d{2})(\d{4,6})(\d{4})/g, '+$1$2XXXX$4')
+    // Generic long numbers that look like phone numbers (10+ digits)
+    .replace(/\b(\d{2})(\d{4,8})(\d{3,4})\b/g, '$1XXXX$3');
+};
+
+// Override console.log to redact phone numbers
+const originalConsoleLog = console.log;
+console.log = (...args) => {
+  const redactedArgs = args.map(arg => {
+    if (typeof arg === 'string') {
+      return redactPhoneForConsole(arg);
+    } else if (typeof arg === 'object' && arg !== null) {
+      return JSON.parse(redactPhoneForConsole(JSON.stringify(arg)));
+    }
+    return arg;
+  });
+  originalConsoleLog.apply(console, redactedArgs);
+};
+
 /**
  * Handles Elevenlabs personalization webhook to provide context variables
  * for voice agent conversations. Returns date, time, and caller information.
