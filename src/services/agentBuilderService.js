@@ -1,6 +1,6 @@
 // src/services/agentBuilderService.js
 const axios = require('axios');
-
+ 
 async function createAgentConfig(options) {
   const {
     agentName = "Calendly Booking Assistant",
@@ -9,17 +9,17 @@ async function createAgentConfig(options) {
     eventTypes = [],
     agentGreeting = "Hi there! I'm your Calendly booking assistant. How can I help you schedule an appointment today?"
   } = options;
-
+ 
   if (!serverUrl) throw new Error('Server URL is required');
   if (!serverApiKey) throw new Error('Server API Key is required');
   if (eventTypes.length === 0) throw new Error('At least one event type is required');
-
+ 
   const hostname = new URL(serverUrl).hostname;
-
+ 
   let eventTypeDescription = "IMPORTANT: Use the EXACT URI without abbreviation.";
   if (eventTypes.length >= 1) eventTypeDescription += ` For 30-minute AI Automation Discovery Call: ${eventTypes[0]?.id || eventTypes[0]}`;
   if (eventTypes.length >= 2) eventTypeDescription += ` -- For 15-minute AI Automation Quick Consultation: ${eventTypes[1]?.id || eventTypes[1]}`;
-
+ 
   return {
     name: agentName,
     conversation_config: {
@@ -74,7 +74,7 @@ async function createAgentConfig(options) {
             {
               id: "ynkWMyhMnGlLHAv7o5XI",
               name: "sendBookingSMS",
-              description: "Use this function to send an SMS confirmation to the caller after they select an appointment time.",
+              description: "Use this function to send an SMS confirmation.",
               type: "webhook",
               api_schema: {
                 url: `${serverUrl}/api/elevenlabs/function-handler`,
@@ -83,40 +83,15 @@ async function createAgentConfig(options) {
                 query_params_schema: null,
                 request_body_schema: {
                   type: "object",
-                  required: [
-                    "eventTime",
-                    "function_name",
-                    "phoneNumber",
-                    "eventDuration",
-                    "schedulingUrl",
-                    "name"
-                  ],
-                  description: "Parameters for sending booking confirmation SMS",
+                  required: ["eventTime", "function_name", "phoneNumber", "eventDuration", "schedulingUrl", "name"],
+                  description: "Parameters for sending SMS",
                   properties: {
-                    eventTime: {
-                      type: "string",
-                      description: "Format: 'Wednesday, May 15 at 2:30 PM'"
-                    },
-                    function_name: {
-                      type: "string",
-                      constant_value: "sendBookingSMS"
-                    },
-                    phoneNumber: {
-                      type: "string",
-                      dynamic_variable: "system__caller_id"
-                    },
-                    eventDuration: {
-                      type: "string",
-                      description: "Use '15' or '30'"
-                    },
-                    schedulingUrl: {
-                      type: "string",
-                      description: "Calendly scheduling URL"
-                    },
-                    name: {
-                      type: "string",
-                      description: "The caller's full name"
-                    }
+                    eventTime: { type: "string", description: "Event time" },
+                    function_name: { type: "string", constant_value: "sendBookingSMS" },
+                    phoneNumber: { type: "string", dynamic_variable: "system__caller_id" },
+                    eventDuration: { type: "string", description: "Duration in minutes" },
+                    schedulingUrl: { type: "string", description: "Calendly scheduling URL" },
+                    name: { type: "string", description: "Caller name" }
                   }
                 },
                 request_headers: {
@@ -138,28 +113,15 @@ async function createAgentConfig(options) {
                 request_body_schema: {
                   type: "object",
                   required: ["function_name", "parameters"],
-                  description: "Parameters for checking specific time slots",
                   properties: {
-                    function_name: {
-                      type: "string",
-                      constant_value: "checkTimes"
-                    },
+                    function_name: { type: "string", constant_value: "checkTimes" },
                     parameters: {
                       type: "object",
                       required: ["eventTypeUrl", "date", "period"],
                       properties: {
-                        eventTypeUrl: {
-                          type: "string",
-                          description: eventTypeDescription
-                        },
-                        date: {
-                          type: "string",
-                          description: "Format: YYYY-MM-DD"
-                        },
-                        period: {
-                          type: "string",
-                          description: "'morning' or 'afternoon'"
-                        }
+                        eventTypeUrl: { type: "string", description: eventTypeDescription },
+                        date: { type: "string", description: "YYYY-MM-DD" },
+                        period: { type: "string", description: "morning or afternoon" }
                       }
                     }
                   }
@@ -184,22 +146,13 @@ async function createAgentConfig(options) {
                   type: "object",
                   required: ["function_name", "parameters"],
                   properties: {
-                    function_name: {
-                      type: "string",
-                      constant_value: "checkAvailability"
-                    },
+                    function_name: { type: "string", constant_value: "checkAvailability" },
                     parameters: {
                       type: "object",
                       required: ["eventTypeUrl"],
                       properties: {
-                        eventTypeUrl: {
-                          type: "string",
-                          description: eventTypeDescription
-                        },
-                        weekOffset: {
-                          type: "integer",
-                          description: "0 = this week, 1 = next week"
-                        }
+                        eventTypeUrl: { type: "string", description: eventTypeDescription },
+                        weekOffset: { type: "integer", description: "0 = this week, 1 = next" }
                       }
                     }
                   }
@@ -219,12 +172,6 @@ async function createAgentConfig(options) {
                 system_tool_type: "end_call"
               }
             }
-          ],
-          tool_ids: [
-            "ynkWMyhMnGlLHAv7o5XI",
-            "OWO956TMCS1s6dN1jgp9",
-            "yzW6vNfJybNSU8Q8YJeo",
-            "4llGAKqlunOuAWS1pfBv"
           ]
         }
       }
@@ -233,40 +180,6 @@ async function createAgentConfig(options) {
       auth: {
         enable_auth: false,
         allowlist: [{ hostname }]
-      },
-      widget: {
-        variant: "full",
-        expandable: "never",
-        avatar: { type: "orb", color_1: "#6DB035", color_2: "#F5CABB" },
-        feedback_mode: "during",
-        bg_color: "#ffffff",
-        text_color: "#000000",
-        btn_color: "#000000",
-        btn_text_color: "#ffffff",
-        border_color: "#e1e1e1",
-        focus_color: "#000000",
-        show_avatar_when_collapsed: true,
-        mic_muting_enabled: false,
-        language_selector: false,
-        terms_html: "<h4>Terms and conditions</h4><p>By clicking &quot;Agree,&quot; and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as described in the Privacy Policy.</p>",
-        terms_text: "#### Terms and conditions\n\nBy clicking \"Agree,\" and each time I interact with this AI agent, I consent..."
-      },
-      overrides: {
-        conversation_config_override: {
-          agent: {
-            prompt: { prompt: true },
-            first_message: true,
-            language: true
-          },
-          tts: {
-            voice_id: true
-          }
-        },
-        enable_conversation_initiation_client_data_from_webhook: true
-      },
-      call_limits: {
-        agent_concurrency_limit: -1,
-        daily_limit: 100000
       },
       privacy: {
         record_voice: true,
@@ -280,15 +193,14 @@ async function createAgentConfig(options) {
           request_headers: { "X-API-Key": serverApiKey }
         }
       },
-      safety: {
-        is_blocked_ivc: false,
-        is_blocked_non_ivc: false,
-        ignore_safety_evaluation: false
+      call_limits: {
+        agent_concurrency_limit: -1,
+        daily_limit: 100000
       }
     }
   };
 }
-
+ 
 async function uploadAgentToElevenlabs(config, elevenlabsApiKey) {
   try {
     console.log('Sending request to Elevenlabs API');
@@ -309,7 +221,7 @@ async function uploadAgentToElevenlabs(config, elevenlabsApiKey) {
     throw new Error(error.response?.data?.detail || 'Failed to upload agent to Elevenlabs');
   }
 }
-
+ 
 module.exports = {
   createAgentConfig,
   uploadAgentToElevenlabs
